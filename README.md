@@ -17,21 +17,21 @@ Die Datei bleibt vollständig statisch: CSS und JavaScript sind inline, es gibt 
 Schriften, Bilder, Skripte, Tracking- oder API-Anfragen im Browser. Hell/Dunkel folgt zunächst
 der Systemeinstellung und lässt sich über „Ansicht“ umschalten. Die Gestaltung „Verbotene
 Bibliothek“ kombiniert dunkle Holzfarben und Gold mit einem hellen Pergamentmodus.
-Die Buchschrift verwendet lokale Systemschriften; die dekorative Bibliothek ist eine
-eigens gezeichnete Inline-Vektorgrafik, keine Anbieterabbildung. Ohne JavaScript bleiben alle
+Die Buchschrift verwendet ausschließlich lokale Systemschriften. Ohne JavaScript bleiben alle
 Termine und Raum-Infos lesbar. Die Zimmerauswahl verwendet weiterhin den bisherigen
 localStorage-Schlüssel; blockierter Speicher verhindert die Filterung nicht.
 
-Die Termine sind je Tag und Zimmer gebündelt. Filter für Zimmer, Standort, Wochentag,
-Tageszeit, Spieleranzahl sowie Start- und Enddatum lassen sich kombinieren. Der Zeitraum
-steht hervorgehoben direkt unter dem Standort. Beide Datumsgrenzen zählen einschließlich;
-ein Enddatum vor dem Startdatum wird als ungültiger Zeitraum erklärt. Der Spielerfilter prüft
-freie Plätze und die bekannte Mindestbestellmenge des einzelnen Termins; daraus wird keine
-allgemeine Teamempfehlung für den Raum abgeleitet. Bei unbekannter Mindestbestellmenge
-erscheint der Termin nur ohne Spielerfilter. „NEU“ vergleicht weiterhin mit dem letzten Lauf.
-Die API-Namen der Zauberakademie werden nur für die Anzeige um „Teil 1“ bzw. „Teil 2“
-ergänzt: Raum `12248` („Die Rückkehr des Dunklen Lords“) ist Teil 2. Auch ohne freie
-Termine bleibt er auswählbar. Die Überwachung bleibt auf Raum `12242` (Teil 1) beschränkt.
+Die Termine sind je Tag und Zimmer gebündelt. „Raum wählen“ öffnet eine Übersicht mit
+anklickbaren Raumkarten samt Standort und Anzahl freier Termine. Nach der Auswahl klappt
+sie wieder zu. Start- und Enddatum stehen direkt darunter. Wochentag, Tageszeit und Spielerzahl
+sind unter „Erweiterte Suche“ eingeklappt; Raum-Infos und Altersregeln sind ebenfalls einklappbar.
+Ein zusätzlicher Standortfilter entfällt. Die Bibliotheksfarben und die Buchschrift bleiben,
+der große Einführungsteil und die Illustration entfallen zugunsten schneller sichtbarer Termine.
+Beide Datumsgrenzen zählen einschließlich. Ein Enddatum vor dem Startdatum wird erklärt.
+Der Spielerfilter prüft freie Plätze und bekannte Mindestbestellmenge je Termin.
+Bei unbekannter Mindestbestellmenge erscheint ein Termin nur ohne Spielerfilter.
+„NEU“ vergleicht weiterhin mit dem letzten Lauf. Zauberakademie `12248` wird als Teil 2
+kenntlich gemacht; ausschließlich Teil 1 (`12242`) löst Meldungen aus.
 
 Raum-Fakten werden während der bisherigen Tagesabfragen aus `location`, `seats`,
 `additionalInfo` und `metaDescription` gelesen. Es gibt keine weiteren Requests je Raum.

@@ -224,7 +224,7 @@ def esc(wert):
 # Kein API-Zugriff im Browser. Ohne JS bleiben sämtliche Termine und Raumdaten sichtbar.
 AUSWAHL_SKRIPT = r"""
 (function () {
-  const ids = ['zimmer', 'standort', 'wochentag', 'tageszeit', 'spieler', 'ab', 'bis'];
+  const ids = ['wochentag', 'tageszeit', 'spieler', 'ab', 'bis'];
   const controls = Object.fromEntries(ids.map(id => [id, document.getElementById(id)]));
   const days = Array.from(document.querySelectorAll('.tag'));
   const rows = Array.from(document.querySelectorAll('.raum-termine'));
@@ -233,6 +233,8 @@ AUSWAHL_SKRIPT = r"""
   const count = document.getElementById('anzahl');
   const empty = document.getElementById('leer');
   const next = document.getElementById('naechste');
+  const roomButtons = Array.from(document.querySelectorAll('.room-choice'));
+  let selectedRoom = 'alle';
   function show() {
     const invalidRange = controls.ab.value && controls.bis.value && controls.ab.value > controls.bis.value;
     document.getElementById('datum-fehler').hidden = !invalidRange;
@@ -243,8 +245,7 @@ AUSWAHL_SKRIPT = r"""
       const hour = Number(slot.dataset.stunde);
       const period = hour < 12 ? 'vormittag' : hour < 18 ? 'nachmittag' : 'abend';
       const people = Number(controls.spieler.value);
-      const fits = (controls.zimmer.value === 'alle' || row.dataset.zimmer === controls.zimmer.value)
-        && (!controls.standort.value || row.dataset.standort === controls.standort.value)
+      const fits = (selectedRoom === 'alle' || row.dataset.zimmer === selectedRoom)
         && (!controls.wochentag.value || day.dataset.wochentag === controls.wochentag.value)
         && (!controls.tageszeit.value || period === controls.tageszeit.value)
         && (!controls.ab.value || day.dataset.datum >= controls.ab.value)
@@ -260,8 +261,7 @@ AUSWAHL_SKRIPT = r"""
       day.querySelector('.tag-anzahl').textContent = n + (n === 1 ? ' Termin' : ' Termine');
     });
     document.querySelectorAll('.raum-info').forEach(card => {
-      card.hidden = (controls.zimmer.value !== 'alle' && card.dataset.zimmer !== controls.zimmer.value)
-        || (controls.standort.value && card.dataset.standort !== controls.standort.value);
+      card.hidden = selectedRoom !== 'alle' && card.dataset.zimmer !== selectedRoom;
     });
     empty.hidden = total > 0;
     empty.textContent = invalidRange
@@ -271,15 +271,24 @@ AUSWAHL_SKRIPT = r"""
     next.hidden = !total;
     const first = days.find(day => !day.hidden);
     next.href = first ? '#' + first.id : '#termine';
-    try { localStorage.setItem(storage, controls.zimmer.value); } catch (e) {}
+    roomButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.room === selectedRoom)));
+    document.getElementById('selected-room').textContent = roomButtons.find(button => button.dataset.room === selectedRoom).dataset.label;
+    try { localStorage.setItem(storage, selectedRoom); } catch (e) {}
   }
   try {
     const saved = localStorage.getItem(storage);
-    if (Array.from(controls.zimmer.options).some(option => option.value === saved)) controls.zimmer.value = saved;
+    if (roomButtons.some(button => button.dataset.room === saved)) selectedRoom = saved;
   } catch (e) {}
+  roomButtons.forEach(button => button.addEventListener('click', () => {
+    selectedRoom = button.dataset.room;
+    document.getElementById('room-picker').open = false;
+    show();
+  }));
+  document.querySelectorAll('.raum-name a, .search-actions a').forEach(link => link.addEventListener('click', () => { document.getElementById('room-details').open = true; }));
   ids.forEach(id => controls[id].addEventListener('change', show));
   document.getElementById('zuruecksetzen').addEventListener('click', () => {
-    ids.forEach(id => { controls[id].value = id === 'zimmer' ? 'alle' : ''; });
+    selectedRoom = 'alle';
+    ids.forEach(id => { controls[id].value = ''; });
     show();
   });
   document.getElementById('modus').addEventListener('change', event => {
@@ -327,129 +336,29 @@ h1 { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:cla
 .panel,.tag { border-radius:4px; box-shadow:0 8px 28px #0000000a; }  .panel h2, .room-section summary { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:1.35rem; letter-spacing:-.02em; } .notice { border-left-width:2px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--soft); } .quick { font-weight:500; } .stamp { font-size:.73rem; margin:14px 0 22px; }
 select,input,button,.slot { border-radius:3px; } .date-range { border-radius:3px; } .date-range legend { letter-spacing:.03em; } .tag-kopf { background:var(--soft); } .tag-kopf h3 { font-family:Georgia,'Times New Roman',serif; font-size:1.05rem; font-weight:400; } .slot { background:var(--chip); border-color:var(--line); } .slot:hover { background:var(--soft); box-shadow:inset 0 0 0 1px var(--accent); } .jump { border-radius:3px; text-transform:uppercase; letter-spacing:.07em; font-size:.7rem; padding:13px 16px; } .raum-info h3 { font-family:Georgia,'Times New Roman',serif; font-size:1.2rem; font-weight:400; } .room-section { border-top:1px solid var(--accent); } .results-head h2 { font-weight:500; }
 @media(max-width:760px) {   header { padding-top:24px; } .hero { position:relative; grid-template-columns:minmax(0,1fr); min-height:250px; margin:0 0 22px; } .hero-copy { position:relative; z-index:1; } .hero-art { position:absolute; right:-2px; top:12px; width:145px; height:225px; opacity:.15; } h1 { font-size:2.65rem; line-height:1.06; max-width:340px; } .intro { max-width:310px; } .eyebrow { max-width:230px; } .panel { border-radius:4px; } .notice { font-size:.8rem; } .stamp { font-size:.72rem; } }
+/* Kompakte Übersicht: Termine vor Dekoration. */
+.wrap { max-width:1000px; } .top { padding:10px 0; } .compact-header { padding:18px 0 0; }
+.compact-header h1 { font-size:1.65rem; line-height:1.15; margin:0 0 10px; max-width:none; letter-spacing:-.03em; }
+.compact-header h1 span { font-style:normal; } .notice { padding:8px 10px; margin:0; font-size:.75rem; }
+.stamp { margin:8px 0 14px; font-size:.7rem; } .quick-search { padding:14px; margin-bottom:18px; }
+.room-picker>summary { font-family:inherit; font-size:.85rem; padding:8px 0; min-height:44px; }
+#selected-room { display:inline-block; color:var(--accent); margin-left:8px; }
+.room-buttons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:10px 0; }
+.room-choice { text-align:left; color:var(--text); min-width:0; padding:10px; line-height:1.3; }
+.room-choice strong { display:block; font-size:.8rem; } .room-choice span { display:block; font-size:.67rem; color:var(--muted); margin-top:4px; }
+.room-choice .room-count { color:var(--accent); } .room-choice[aria-pressed=true] { border-color:var(--accent); background:var(--soft); box-shadow:inset 0 0 0 1px var(--accent); }
+.all-rooms { grid-column:1/-1; } .all-rooms strong,.all-rooms span { display:inline; margin-right:10px; }
+.date-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .date-grid label { margin:8px 0 4px; }
+.advanced { margin-top:8px; } .advanced>summary { font:500 .8rem/1.5 system-ui,sans-serif; min-height:44px; padding:12px 0; color:var(--accent); }
+.advanced-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
+.search-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:.75rem; } .search-actions button { font-size:.75rem; padding:5px 10px; }
+.results-head { margin-bottom:10px; } .results-head h2 { font-size:1.05rem; } .results-head p { font-size:.7rem; }
+.results-head .jump { font-size:.65rem; padding:10px; } .room-section { margin-top:24px; }
+@media(max-width:760px) { .wrap { padding:0 12px; } .compact-header { padding-top:14px; } .compact-header h1 { font-size:1.5rem; } .quick-search { padding:12px; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } .results-head { gap:8px; } .jump { width:auto; } }
+
 """
 
 # Originale dekorative Vektorgrafik, ohne externe Ressourcen.
-BIBLIOTHEK_ILLUSTRATION = """<div class="hero-art" aria-hidden="true">
-<svg viewBox="0 0 300 330" xmlns="http://www.w3.org/2000/svg">
-<path d="M29 108V285H86V108Z" fill="var(--soft)" stroke="currentColor" stroke-opacity=".45"/>
-<path d="M29 153h57" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M29 200h57" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M29 247h57" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M29 285h57" stroke="currentColor" stroke-opacity=".6"/>
-<rect x="34" y="119" width="5" height="30" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M35 124h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="42" y="115" width="5" height="34" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M43 120h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="50" y="123" width="5" height="26" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M51 128h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="58" y="117" width="5" height="32" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M59 122h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="66" y="120" width="5" height="29" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M67 125h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="74" y="115" width="5" height="34" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M75 120h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="34" y="162" width="5" height="34" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M35 167h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="42" y="170" width="5" height="26" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M43 175h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="50" y="164" width="5" height="32" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M51 169h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="58" y="167" width="5" height="29" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M59 172h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="66" y="162" width="5" height="34" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M67 167h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="74" y="166" width="5" height="30" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M75 171h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="34" y="217" width="5" height="26" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M35 222h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="42" y="211" width="5" height="32" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M43 216h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="50" y="214" width="5" height="29" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M51 219h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="58" y="209" width="5" height="34" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M59 214h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="66" y="213" width="5" height="30" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M67 218h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="74" y="209" width="5" height="34" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M75 214h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="34" y="258" width="5" height="32" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M35 263h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="42" y="261" width="5" height="29" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M43 266h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="50" y="256" width="5" height="34" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M51 261h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="58" y="260" width="5" height="30" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M59 265h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="66" y="256" width="5" height="34" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M67 261h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="74" y="264" width="5" height="26" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M75 269h3" stroke="var(--surface)" stroke-width="1"/>
-<path d="M214 108V285H271V108Z" fill="var(--soft)" stroke="currentColor" stroke-opacity=".45"/>
-<path d="M214 153h57" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M214 200h57" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M214 247h57" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M214 285h57" stroke="currentColor" stroke-opacity=".6"/>
-<rect x="219" y="119" width="5" height="30" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M220 124h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="227" y="115" width="5" height="34" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M228 120h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="235" y="123" width="5" height="26" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M236 128h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="243" y="117" width="5" height="32" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M244 122h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="251" y="120" width="5" height="29" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M252 125h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="259" y="115" width="5" height="34" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M260 120h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="219" y="162" width="5" height="34" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M220 167h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="227" y="170" width="5" height="26" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M228 175h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="235" y="164" width="5" height="32" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M236 169h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="243" y="167" width="5" height="29" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M244 172h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="251" y="162" width="5" height="34" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M252 167h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="259" y="166" width="5" height="30" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M260 171h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="219" y="217" width="5" height="26" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M220 222h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="227" y="211" width="5" height="32" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M228 216h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="235" y="214" width="5" height="29" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M236 219h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="243" y="209" width="5" height="34" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M244 214h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="251" y="213" width="5" height="30" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M252 218h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="259" y="209" width="5" height="34" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M260 214h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="219" y="258" width="5" height="32" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M220 263h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="227" y="261" width="5" height="29" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M228 266h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="235" y="256" width="5" height="34" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M236 261h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="243" y="260" width="5" height="30" rx=".6" fill="currentColor" opacity="0.25"/>
-<path d="M244 265h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="251" y="256" width="5" height="34" rx=".6" fill="currentColor" opacity="0.4"/>
-<path d="M252 261h3" stroke="var(--surface)" stroke-width="1"/>
-<rect x="259" y="264" width="5" height="26" rx=".6" fill="currentColor" opacity="0.55"/>
-<path d="M260 269h3" stroke="var(--surface)" stroke-width="1"/>
-<path d="M85 285V136c0-53 29-82 65-112 36 30 65 59 65 112v149Z" fill="var(--soft)" stroke="currentColor" stroke-opacity=".65"/>
-<path d="M98 281V138c0-43 22-68 52-96 30 28 52 53 52 96v143Z" fill="var(--bg)" stroke="currentColor" stroke-opacity=".8"/>
-<path d="M109 280V141c0-34 17-57 41-80 24 23 41 46 41 80v139" fill="var(--surface)" stroke="currentColor" stroke-opacity=".3"/>
-<path d="M150 67v212M111 169h78M117 181h24v73h-24Zm42 0h24v73h-24Z" fill="none" stroke="currentColor" stroke-opacity=".3"/>
-<circle cx="143" cy="213" r="2" fill="currentColor"/>
-<circle cx="157" cy="213" r="2" fill="currentColor"/>
-<path d="M21 286h257M80 296h140M69 306h162" stroke="currentColor" stroke-opacity=".4"/>
-<path d="M150 1v13m-6-7h12M14 80v10m-5-5h10M285 70v10m-5-5h10" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M122 112q28-14 56 0v31q-28-14-56 0Z" fill="var(--soft)" stroke="currentColor" stroke-opacity=".6"/>
-<path d="M150 105v31" stroke="currentColor" stroke-opacity=".6"/>
-</svg>
-</div>"""
 
 
 def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, raum_infos=None):
@@ -461,19 +370,18 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
     zimmer = {zid: f"Zauberakademie – Teil {teile[zid]} · {name}" if zid in teile else name
               for zid, name in zimmer.items()}
     anzahl = Counter(t["zimmer_id"] for t in termine)
-    optionen = [f'<option value="alle">Alle Zimmer ({len(termine)} frei)</option>']
+    raum_buttons = [f'<button type="button" class="room-choice all-rooms" data-room="alle" data-label="Alle Zimmer" aria-pressed="true"><strong>Alle Zimmer</strong><span>{len(termine)} frei</span></button>']
     karten = []
     for zid, name in sorted(zimmer.items(), key=lambda item: item[1].casefold()):
         stand = f"{anzahl[zid]} frei" if anzahl[zid] else "nichts frei"
-        optionen.append(f'<option value="{esc(zid)}">{esc(name)} ({esc(stand)})</option>')
         fakten = raum_infos.get(zid, {})
         standort = fakten.get("Standort", "")
+        kurzname = f"Zauberakademie {teile[zid]}" if zid in teile else name
+        raum_buttons.append(f'<button type="button" class="room-choice" data-room="{esc(zid)}" data-label="{esc(kurzname)}" aria-pressed="false" aria-label="{esc(name)} ({esc(stand)})"><strong>{esc(kurzname)}</strong><span>{esc(standort)}</span><span class="room-count">{esc(stand)}</span></button>')
         daten = ''.join(f'<dt>{esc(k)}</dt><dd>{esc(v)}</dd>' for k, v in fakten.items())
         karten.append(f'''<article class="raum-info panel" id="raum-{esc(zid)}" data-zimmer="{esc(zid)}" data-standort="{esc(standort)}">
 <h3>{esc(name)}</h3><p class="muted">{esc(stand)}</p><dl>{daten}</dl>
 <a href="{esc(ZIMMER_SEITEN.get(zid, WEBSITE))}">Offizielle Raumseite · Bilder &amp; Details ↗</a></article>''')
-    standorte = sorted({f["Standort"] for f in raum_infos.values() if f.get("Standort")})
-    standort_optionen = ''.join(f'<option>{esc(ort)}</option>' for ort in standorte)
     tage = []
     # Nach Raum bündeln: pro Tag nur ein Raumname, kompakte Zeit-Chips statt 2.500 Textzeilen.
     for datum, gruppe in groupby(termine, key=lambda t: t["datum"]):
@@ -499,19 +407,15 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Freie Escape-Room-Termine Nürnberg</title><style>{STIL}</style></head>
 <body><div class="wrap"><div class="top"><span class="wordmark">ESCAPE · NÜRNBERG</span><div class="js-only" hidden><label for="modus" style="display:inline">Ansicht </label><select class="mode" id="modus"><option value="auto">Automatisch</option><option value="light">Hell</option><option value="dark">Dunkel</option></select></div></div>
-<header><div class="hero"><div class="hero-copy"><p class="eyebrow">{len(zimmer)} Zimmer · {len(standorte)} Standorte · eine Übersicht</p><h1>Die nächste Tür<br><span>wartet auf euch.</span></h1><p class="intro">Freie Escape-Room-Termine in Nürnberg. Wählt euren Zeitraum und findet den passenden Moment für euer nächstes Abenteuer.</p></div>{BIBLIOTHEK_ILLUSTRATION}</div>
-<p class="notice"><strong>Inoffizielle private Übersicht, ohne Gewähr.</strong> Keine Seite von Finest Escape. Verbindlich ist die Buchung beim Anbieter. <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a></p>
-<nav class="quick" aria-label="Seitennavigation"><a href="#termine">Zu den Terminen ↓</a><a href="#raeume">Raum-Infos &amp; Altersregeln ↓</a></nav><p class="stamp">Stand: {esc(abgefragt_um)} · Zweimal täglich aktualisiert<br>Zeitraum: {start.strftime('%d.%m.%Y')}–{end.strftime('%d.%m.%Y')}</p></header>
-<div class="layout"><aside id="filter" class="panel js-only" hidden><h2>Was passt zu euch?</h2><div class="filter-grid"><div class="wide"><label for="zimmer">Zimmer</label><select id="zimmer">{''.join(optionen)}</select></div>
-<div class="wide"><label for="standort">Standort</label><select id="standort"><option value="">Beide Standorte</option>{standort_optionen}</select></div>
-<fieldset class="date-range wide"><legend>Euer Zeitraum</legend><div class="date-grid"><div><label for="ab">Ab Datum</label><input id="ab" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div><div><label for="bis">Bis Datum</label><input id="bis" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div></div><p class="date-error" id="datum-fehler" role="status" hidden>Das Enddatum liegt vor dem Startdatum.</p></fieldset>
-<div><label for="wochentag">Wochentag</label><select id="wochentag"><option value="">Alle Tage</option>{wochen_optionen}</select></div>
-<div><label for="tageszeit">Tageszeit</label><select id="tageszeit"><option value="">Jederzeit</option><option value="vormittag">Vor 12 Uhr</option><option value="nachmittag">12–18 Uhr</option><option value="abend">Ab 18 Uhr</option></select></div>
-<div><label for="spieler">Spieleranzahl</label><select id="spieler"><option value="">Alle Größen</option>{spieler_optionen}</select></div></div>
-<p class="hint">Spielerfilter: freie Plätze und bekannte Mindestbestellmenge je Termin. „P.“ = freie Plätze. NEU = seit dem letzten Lauf wieder oder erstmals frei.</p><button class="reset" id="zuruecksetzen" type="button">Filter zurücksetzen</button></aside>
-<main id="termine"><div class="results-head"><div><h2 id="anzahl" aria-live="polite">{len(termine)} freie Termine</h2><p>Je Tag und Zimmer · Uhrzeit anklicken zum Anbieter<br><a class="js-only" href="#filter" hidden>Filter ändern ↑</a></p></div><a class="jump js-only" id="naechste" href="#termine" hidden>Nächste freie Termine ↓</a></div>
-<noscript><p>Filter benötigen JavaScript. Alle Termine und Raum-Infos sind unten sichtbar.</p></noscript><p class="empty" id="leer" {'hidden' if termine else ''}>Keine freien Termine für diese Auswahl im abgefragten Zeitraum. Wählt ein anderes Zimmer oder setzt die Filter zurück.</p>{''.join(tage)}</main></div>
-<section class="room-section" id="raeume"><details open><summary>Die Zimmer kennenlernen</summary><p class="muted">Sachliche Angaben aus den Buchungsdaten. Fehlende Angaben werden weggelassen. Bilder, vollständige Teilnahmebedingungen und verbindliche Details findet ihr auf der offiziellen Raumseite.</p><div class="room-grid">{''.join(karten)}</div></details></section>
+<header class="compact-header"><h1>Freie Escape-Termine <span>Nürnberg</span></h1><p class="notice">Inoffizielle private Übersicht, ohne Gewähr. <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a></p><p class="stamp">Stand: {esc(abgefragt_um)} · 2× täglich aktualisiert</p></header>
+<section id="filter" class="panel quick-search js-only" aria-label="Terminsuche" hidden>
+<details id="room-picker" class="room-picker"><summary>Raum wählen <strong id="selected-room">Alle Zimmer</strong></summary><div class="room-buttons" role="group" aria-label="Zimmerauswahl">{''.join(raum_buttons)}</div></details>
+<div class="date-grid"><div><label for="ab">Ab Datum</label><input id="ab" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div><div><label for="bis">Bis Datum</label><input id="bis" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div></div><p class="date-error" id="datum-fehler" role="status" hidden>Das Enddatum liegt vor dem Startdatum.</p>
+<details class="advanced"><summary>Erweiterte Suche</summary><div class="advanced-grid"><div><label for="wochentag">Wochentag</label><select id="wochentag"><option value="">Alle Tage</option>{wochen_optionen}</select></div><div><label for="tageszeit">Tageszeit</label><select id="tageszeit"><option value="">Jederzeit</option><option value="vormittag">Vor 12 Uhr</option><option value="nachmittag">12–18 Uhr</option><option value="abend">Ab 18 Uhr</option></select></div><div><label for="spieler">Spieleranzahl</label><select id="spieler"><option value="">Alle Größen</option>{spieler_optionen}</select></div></div><p class="hint">Spielerfilter: freie Plätze und bekannte Mindestbestellmenge je Termin.</p></details>
+<div class="search-actions"><a href="#raeume">Raum-Infos &amp; Altersregeln</a><button id="zuruecksetzen" type="button">Zurücksetzen</button></div></section>
+<main id="termine"><div class="results-head"><div><h2 id="anzahl" aria-live="polite">{len(termine)} freie Termine</h2><p>Uhrzeit anklicken zum Anbieter · P. = freie Plätze · NEU = seit letztem Lauf</p></div><a class="jump js-only" id="naechste" href="#termine" hidden>Nächste freie Termine ↓</a></div>
+<noscript><p>Filter benötigen JavaScript. Alle Termine und Raum-Infos sind unten sichtbar.</p></noscript><p class="empty" id="leer" {'hidden' if termine else ''}>Keine freien Termine für diese Auswahl im abgefragten Zeitraum. Wählt ein anderes Zimmer oder setzt die Filter zurück.</p>{''.join(tage)}</main>
+<section class="room-section" id="raeume"><details id="room-details"><summary>Raum-Infos &amp; Altersregeln</summary><p class="muted">Sachliche Angaben aus den Buchungsdaten. Fehlende Angaben werden weggelassen. Bilder, vollständige Teilnahmebedingungen und verbindliche Details findet ihr auf der offiziellen Raumseite.</p><div class="room-grid">{''.join(karten)}</div></details></section>
 <footer>Inoffizielle private Übersicht, ohne Gewähr · <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a><br>Keine Werbung · Kein Tracking · Buchung direkt beim Anbieter</footer></div><script>{AUSWAHL_SKRIPT}</script></body></html>''', encoding="utf-8")
 
 
