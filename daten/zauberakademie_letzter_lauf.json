@@ -1,5 +1,5 @@
 {
-  "abgefragt_um": "04.11.2026 13:02",
+  "abgefragt_um": "04.11.2026 22:21",
   "zimmer": [
     "12098",
     "12146",
@@ -230,6 +230,15 @@
       "min_spieler": 2
     },
     {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2026-11-06",
+      "uhrzeit": "17:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
       "zimmer_id": "18792",
       "zimmer": "Auroras Magischer Würfel",
       "datum": "2026-11-06",
@@ -324,24 +333,6 @@
       "zimmer": "Sherlock Holmes",
       "datum": "2026-11-07",
       "uhrzeit": "11:55",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-11-07",
-      "uhrzeit": "12:50",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-07",
-      "uhrzeit": "13:20",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
@@ -486,15 +477,6 @@
       "zimmer": "Steampunk Puppenspieler",
       "datum": "2026-11-08",
       "uhrzeit": "14:15",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-08",
-      "uhrzeit": "14:45",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
@@ -1283,15 +1265,6 @@
       "min_spieler": 2
     },
     {
-      "zimmer_id": "12146",
-      "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-11-15",
-      "uhrzeit": "16:15",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
       "zimmer_id": "18792",
       "zimmer": "Auroras Magischer Würfel",
       "datum": "2026-11-15",
@@ -1314,15 +1287,6 @@
       "zimmer": "Sherlock Holmes",
       "datum": "2026-11-15",
       "uhrzeit": "18:10",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "17163",
-      "zimmer": "Vecnas Game",
-      "datum": "2026-11-15",
-      "uhrzeit": "19:00",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
@@ -1697,6 +1661,15 @@
       "min_spieler": 2
     },
     {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2026-11-20",
+      "uhrzeit": "20:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
       "zimmer_id": "12146",
       "zimmer": "Steampunk Puppenspieler",
       "datum": "2026-11-20",
@@ -1708,15 +1681,6 @@
     {
       "zimmer_id": "12200",
       "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-11-20",
-      "uhrzeit": "21:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
       "datum": "2026-11-20",
       "uhrzeit": "21:00",
       "frei": 6,
@@ -1821,15 +1785,6 @@
       "frei": 8,
       "gesamt": 8,
       "min_spieler": 1
-    },
-    {
-      "zimmer_id": "12146",
-      "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-11-21",
-      "uhrzeit": "19:05",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
     },
     {
       "zimmer_id": "12434",
@@ -2426,15 +2381,6 @@
       "min_spieler": 1
     },
     {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-27",
-      "uhrzeit": "16:20",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
       "zimmer_id": "17163",
       "zimmer": "Vecnas Game",
       "datum": "2026-11-27",
@@ -2493,15 +2439,6 @@
       "zimmer": "Vecnas Game",
       "datum": "2026-11-27",
       "uhrzeit": "20:20",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-11-27",
-      "uhrzeit": "20:30",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
@@ -3785,15 +3722,6 @@
       "min_spieler": 2
     },
     {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
-      "datum": "2026-12-05",
-      "uhrzeit": "19:35",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
       "zimmer_id": "12239",
       "zimmer": "Sherlock Holmes",
       "datum": "2026-12-05",
@@ -4023,15 +3951,6 @@
       "zimmer": "Steampunk Puppenspieler",
       "datum": "2026-12-06",
       "uhrzeit": "14:15",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-12-06",
-      "uhrzeit": "14:45",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
@@ -4723,15 +4642,6 @@
     {
       "zimmer_id": "12200",
       "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-12-12",
-      "uhrzeit": "11:55",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
       "datum": "2026-12-12",
       "uhrzeit": "11:55",
       "frei": 6,
@@ -6093,15 +6003,6 @@
       "zimmer": "Sherlock Holmes",
       "datum": "2026-12-19",
       "uhrzeit": "14:45",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "17163",
-      "zimmer": "Vecnas Game",
-      "datum": "2026-12-19",
-      "uhrzeit": "15:00",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
@@ -7493,26 +7394,8 @@
       "min_spieler": 2
     },
     {
-      "zimmer_id": "19197",
-      "zimmer": "Prestige",
-      "datum": "2026-12-27",
-      "uhrzeit": "10:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
       "zimmer_id": "12146",
       "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-12-27",
-      "uhrzeit": "10:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "17163",
-      "zimmer": "Vecnas Game",
       "datum": "2026-12-27",
       "uhrzeit": "10:00",
       "frei": 6,
@@ -11799,15 +11682,6 @@
       "zimmer": "Sherlock Holmes",
       "datum": "2027-01-17",
       "uhrzeit": "11:55",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "19197",
-      "zimmer": "Prestige",
-      "datum": "2027-01-17",
-      "uhrzeit": "12:00",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
