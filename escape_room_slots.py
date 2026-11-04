@@ -303,9 +303,6 @@ AUSWAHL_SKRIPT = r"""
     ids.forEach(id => { controls[id].value = ''; });
     show();
   });
-  document.getElementById('modus').addEventListener('change', event => {
-    document.documentElement.dataset.theme = event.target.value;
-  });
   document.querySelectorAll('.js-only').forEach(element => { element.hidden = false; });
   show();
 })();
@@ -314,9 +311,7 @@ AUSWAHL_SKRIPT = r"""
 
 STIL = """
 :root { color-scheme:light dark; --bg:#f0e6d0; --surface:#faf3e2; --text:#30251e; --muted:#6e5d49; --line:#cdbb96; --accent:#775121; --soft:#e8dabe; --new:#f1d18e; --newtext:#5d3416; }
-@media(prefers-color-scheme:dark) { :root:not([data-theme=light]) { --bg:#181311; --surface:#251f1a; --text:#f0e6d2; --muted:#c2b298; --line:#51412f; --accent:#dfbb78; --soft:#32281e; --new:#593d21; --newtext:#ffe6ad; } }
-:root[data-theme=dark] { color-scheme:dark; --bg:#181311; --surface:#251f1a; --text:#f0e6d2; --muted:#c2b298; --line:#51412f; --accent:#dfbb78; --soft:#32281e; --new:#593d21; --newtext:#ffe6ad; }
-:root[data-theme=light] { color-scheme:light; }
+@media(prefers-color-scheme:dark) { :root { --bg:#181311; --surface:#251f1a; --text:#f0e6d2; --muted:#c2b298; --line:#51412f; --accent:#dfbb78; --soft:#32281e; --new:#593d21; --newtext:#ffe6ad; } }
 * { box-sizing:border-box; } [hidden] { display:none !important; }
 body { margin:0; background:var(--bg); color:var(--text); font:15px/1.45 system-ui,-apple-system,sans-serif; }
 .wrap { max-width:850px; margin:auto; padding:0 18px; } a { color:var(--accent); text-underline-offset:3px; }
@@ -324,9 +319,10 @@ button,input,select { font:inherit; color:var(--text); background:var(--surface)
 button,summary { cursor:pointer; } button:hover { border-color:var(--accent); } :focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 .top { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:14px 0 8px; }
-h1 { font:400 1.4rem/1.15 Georgia,serif; margin:0; } h1 span { color:var(--accent); } .mode { font-size:.75rem; min-height:36px; padding:5px; }
+h1 { font:400 1.9rem/1.15 Georgia,serif; margin:0; } h1 span { color:var(--accent); }
 .notice { margin:0 0 18px; color:var(--muted); font-size:.67rem; line-height:1.5; }
-.quick-search { margin-bottom:18px; } .room-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:start; }
+.quick-search { margin-bottom:22px; padding:14px; background:var(--soft); border:1px solid var(--line); border-radius:10px; }
+#termine { border-top:2px solid var(--accent); padding-top:18px; } .room-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:start; }
 .room-picker { min-width:0; } .room-picker>summary { display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:56px; background:var(--surface); border:1px solid var(--accent); border-radius:6px; padding:10px 12px; list-style:none; }
 .room-picker>summary::-webkit-details-marker { display:none; } #selected-room { font-size:1.05rem; font-weight:650; overflow-wrap:anywhere; }
 .change-label { font-size:.7rem; color:var(--accent); white-space:nowrap; } .change-label:after { content:' ▾'; }
@@ -339,7 +335,7 @@ h1 { font:400 1.4rem/1.15 Georgia,serif; margin:0; } h1 span { color:var(--accen
 .date-grid,.advanced-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .advanced-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 label { display:block; margin:8px 0 4px; font-size:.75rem; } input,select { width:100%; min-width:0; } .date-error,.hint { font-size:.75rem; } .hint { color:var(--muted); } #zuruecksetzen { font-size:.75rem; margin:8px 0; }
 .results-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:8px; } h2 { font-size:1rem; font-weight:600; margin:0; } .stamp { font-size:.65rem; color:var(--muted); white-space:nowrap; }
-.empty { margin:0; padding:18px 0 12px; color:var(--muted); font-size:.9rem; } .booking-link { display:inline-block; padding:10px 0; font-size:.8rem; }
+.empty { margin:12px 0 0; padding:20px 16px; background:var(--surface); border:1px dashed var(--line); border-radius:8px; color:var(--muted); font-size:.9rem; } .booking-link { display:inline-block; padding:10px 0; font-size:.8rem; }
 .tag { border:1px solid var(--line); background:var(--surface); border-radius:6px; margin-bottom:12px; overflow:hidden; } .tag-kopf { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:10px 12px; background:var(--soft); }
 .tag-kopf h3 { font:400 1rem Georgia,serif; margin:0; } .tag-anzahl { color:var(--muted); font-size:.65rem; }
 .raum-termine { padding:12px; border-top:1px solid var(--line); } .raum-name { font-size:.8rem; margin-bottom:8px; } .adresse { display:block; font-size:.65rem; color:var(--muted); }
@@ -349,7 +345,7 @@ label { display:block; margin:8px 0 4px; font-size:.75rem; } input,select { widt
 .room-grid { display:grid; gap:12px; margin:10px 0; } .raum-info { min-width:0; padding:12px 0; } .raum-info h3 { font:400 1.25rem Georgia,serif; margin:0 0 10px; } .raum-info p { font-size:.8rem; color:var(--muted); } dl { font-size:.85rem; } dt { color:var(--muted); margin-top:10px; } dd { margin:2px 0; } .raum-info a { font-size:.8rem; }
 dialog { color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:18px; width:min(550px,calc(100% - 24px)); max-height:85vh; overflow:auto; } dialog::backdrop { background:#0009; } .dialog-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; } .dialog-bar button { font-size:.8rem; }
 footer { border-top:1px solid var(--line); margin-top:24px; padding:12px 0 24px; color:var(--muted); font-size:.72rem; } footer summary { padding:8px 0; } .room-section { margin-top:20px; }
-@media(max-width:600px) { .wrap { padding:0 12px; } h1 { font-size:1.15rem; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } #selected-room { font-size:.95rem; } .room-picker>summary { padding:10px; } .change-label { font-size:.62rem; } .results-head { flex-wrap:wrap; gap:3px; } }
+@media(max-width:600px) { .wrap { padding:0 12px; } h1 { font-size:1.65rem; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } #selected-room { font-size:.95rem; } .room-picker>summary { padding:10px; } .change-label { font-size:.62rem; } .results-head { flex-wrap:wrap; gap:3px; } }
 """
 
 
@@ -399,7 +395,7 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
     HTML_DATEI.write_text(f'''<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Freie Escape-Room-Termine Nürnberg</title><style>{STIL}</style></head>
-<body><div class="wrap"><header class="top"><h1>Escape-Termine <span>Nürnberg</span></h1><div class="js-only" hidden><label class="sr-only" for="modus">Ansicht</label><select class="mode" id="modus"><option value="auto">Auto</option><option value="light">Hell</option><option value="dark">Dunkel</option></select></div></header>
+<body><div class="wrap"><header class="top"><h1>Escape-Termine <span>Nürnberg</span></h1></header>
 <p class="notice">Inoffizielle private Übersicht, ohne Gewähr. <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a></p>
 <section id="filter" class="quick-search js-only" aria-label="Terminsuche" hidden>
 <div class="room-bar"><details id="room-picker" class="room-picker"><summary><span class="sr-only">Raum wählen: </span><strong id="selected-room">Zimmer wählen</strong><span class="change-label">Zimmer ändern</span></summary><div class="room-buttons" role="group" aria-label="Zimmerauswahl">{''.join(raum_buttons)}</div></details><button id="rauminfo" type="button">Rauminfo</button></div>
