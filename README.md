@@ -21,12 +21,14 @@ Die Buchschrift verwendet ausschließlich lokale Systemschriften. Ohne JavaScrip
 Termine und Raum-Infos lesbar. Die Zimmerauswahl verwendet weiterhin den bisherigen
 localStorage-Schlüssel; blockierter Speicher verhindert die Filterung nicht.
 
-Die Termine sind je Tag und Zimmer gebündelt. „Raum wählen“ öffnet eine Übersicht mit
-anklickbaren Raumkarten samt Standort und Anzahl freier Termine. Nach der Auswahl klappt
-sie wieder zu. Start- und Enddatum stehen direkt darunter. Wochentag, Tageszeit und Spielerzahl
-sind unter „Erweiterte Suche“ eingeklappt; Raum-Infos und Altersregeln sind ebenfalls einklappbar.
-Ein zusätzlicher Standortfilter entfällt. Die Bibliotheksfarben und die Buchschrift bleiben,
-der große Einführungsteil und die Illustration entfallen zugunsten schneller sichtbarer Termine.
+Im Mittelpunkt stehen die Zimmerauswahl und die freien Uhrzeiten je Tag. „Zimmer ändern“
+öffnet Schaltflächen für alle Räume. Ohne gemerkte Auswahl startet die Seite mit Zauberakademie 2;
+eine vorhandene Auswahl bleibt erhalten. Bei einem gewählten Zimmer werden Name und Adresse
+nicht bei jedem Tag wiederholt. „Rauminfo“ öffnet Standort, Altersregeln und offiziellen Link
+in einem separaten Dialog. Ohne JavaScript stehen diese Angaben weiterhin unter den Terminen.
+
+„Suche eingrenzen“ enthält Start-/Enddatum, Wochentag, Tageszeit und Spielerzahl und ist
+zunächst geschlossen. Zurücksetzen löscht nur die Suchfilter und behält das Zimmer.
 Beide Datumsgrenzen zählen einschließlich. Ein Enddatum vor dem Startdatum wird erklärt.
 Der Spielerfilter prüft freie Plätze und bekannte Mindestbestellmenge je Termin.
 Bei unbekannter Mindestbestellmenge erscheint ein Termin nur ohne Spielerfilter.

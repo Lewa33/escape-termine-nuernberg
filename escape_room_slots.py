@@ -232,9 +232,17 @@ AUSWAHL_SKRIPT = r"""
   const storage = 'finest-escape-zimmer';
   const count = document.getElementById('anzahl');
   const empty = document.getElementById('leer');
-  const next = document.getElementById('naechste');
+  const booking = document.getElementById('buchung');
   const roomButtons = Array.from(document.querySelectorAll('.room-choice'));
-  let selectedRoom = 'alle';
+  let selectedRoom = roomButtons.some(button => button.dataset.room === '12248') ? '12248' : 'alle';
+  const dialog = document.getElementById('raum-dialog');
+  document.getElementById('dialog-inhalt').append(document.querySelector('#raeume .room-grid'));
+  document.getElementById('raeume').hidden = true;
+  function openInfo(room) {
+    document.querySelectorAll('.raum-info').forEach(card => { card.hidden = room !== 'alle' && card.dataset.zimmer !== room; });
+    dialog.showModal();
+  }
+  document.getElementById('rauminfo').addEventListener('click', () => openInfo(selectedRoom));
   function show() {
     const invalidRange = controls.ab.value && controls.bis.value && controls.ab.value > controls.bis.value;
     document.getElementById('datum-fehler').hidden = !invalidRange;
@@ -264,13 +272,16 @@ AUSWAHL_SKRIPT = r"""
       card.hidden = selectedRoom !== 'alle' && card.dataset.zimmer !== selectedRoom;
     });
     empty.hidden = total > 0;
-    empty.textContent = invalidRange
-      ? 'Das Enddatum liegt vor dem Startdatum. Bitte passt den Zeitraum an.'
-      : 'Keine freien Termine für diese Auswahl im abgefragten Zeitraum. Wählt ein anderes Zimmer oder setzt die Filter zurück.';
-    count.textContent = total.toLocaleString('de-DE') + (total === 1 ? ' freier Termin' : ' freie Termine');
-    next.hidden = !total;
-    const first = days.find(day => !day.hidden);
-    next.href = first ? '#' + first.id : '#termine';
+    const hasFilters = ids.some(id => controls[id].value);
+    document.getElementById('search-label').textContent = hasFilters ? 'Suche eingrenzen · aktiv' : 'Suche eingrenzen';
+    document.getElementById('zuruecksetzen').hidden = !hasFilters;
+    empty.textContent = invalidRange ? 'Das Enddatum liegt vor dem Startdatum.'
+      : hasFilters ? 'Keine Termine für diese Suche.' : 'Bis ' + empty.dataset.bis + ' sind keine Termine frei.';
+    count.textContent = total ? total.toLocaleString('de-DE') + (total === 1 ? ' freier Termin' : ' freie Termine') : 'Freie Termine';
+    const selectedButton = roomButtons.find(button => button.dataset.room === selectedRoom);
+    booking.href = selectedButton.dataset.seite;
+    booking.hidden = total > 0;
+    document.body.classList.toggle('single-room', selectedRoom !== 'alle');
     roomButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.room === selectedRoom)));
     document.getElementById('selected-room').textContent = roomButtons.find(button => button.dataset.room === selectedRoom).dataset.label;
     try { localStorage.setItem(storage, selectedRoom); } catch (e) {}
@@ -284,10 +295,11 @@ AUSWAHL_SKRIPT = r"""
     document.getElementById('room-picker').open = false;
     show();
   }));
-  document.querySelectorAll('.raum-name a, .search-actions a').forEach(link => link.addEventListener('click', () => { document.getElementById('room-details').open = true; }));
+  document.querySelectorAll('.raum-name a').forEach(link => link.addEventListener('click', event => {
+    event.preventDefault(); openInfo(link.closest('.raum-termine').dataset.zimmer);
+  }));
   ids.forEach(id => controls[id].addEventListener('change', show));
   document.getElementById('zuruecksetzen').addEventListener('click', () => {
-    selectedRoom = 'alle';
     ids.forEach(id => { controls[id].value = ''; });
     show();
   });
@@ -301,64 +313,44 @@ AUSWAHL_SKRIPT = r"""
 
 
 STIL = """
-:root { color-scheme:light dark; --bg:#f0e6d0;--surface:#faf3e2;--text:#30251e;--muted:#6e5d49;--line:#cdbb96;--accent:#775121;--soft:#e8dabe;--new:#f1d18e;--newtext:#5d3416;--glow:#9e682d19;--chip:#fffbf0; }
-@media(prefers-color-scheme:dark) { :root:not([data-theme=light]) { --bg:#181311;--surface:#251f1a;--text:#f0e6d2;--muted:#c2b298;--line:#51412f;--accent:#dfbb78;--soft:#32281e;--new:#593d21;--newtext:#ffe6ad;--glow:#b67b3020;--chip:#2a231c; } }
-:root[data-theme=dark] { color-scheme:dark; --bg:#181311;--surface:#251f1a;--text:#f0e6d2;--muted:#c2b298;--line:#51412f;--accent:#dfbb78;--soft:#32281e;--new:#593d21;--newtext:#ffe6ad;--glow:#b67b3020;--chip:#2a231c; }
+:root { color-scheme:light dark; --bg:#f0e6d0; --surface:#faf3e2; --text:#30251e; --muted:#6e5d49; --line:#cdbb96; --accent:#775121; --soft:#e8dabe; --new:#f1d18e; --newtext:#5d3416; }
+@media(prefers-color-scheme:dark) { :root:not([data-theme=light]) { --bg:#181311; --surface:#251f1a; --text:#f0e6d2; --muted:#c2b298; --line:#51412f; --accent:#dfbb78; --soft:#32281e; --new:#593d21; --newtext:#ffe6ad; } }
+:root[data-theme=dark] { color-scheme:dark; --bg:#181311; --surface:#251f1a; --text:#f0e6d2; --muted:#c2b298; --line:#51412f; --accent:#dfbb78; --soft:#32281e; --new:#593d21; --newtext:#ffe6ad; }
 :root[data-theme=light] { color-scheme:light; }
 * { box-sizing:border-box; } [hidden] { display:none !important; }
-html { scroll-padding-top:1rem; } body { margin:0; background:var(--bg); color:var(--text); font:16px/1.5 system-ui,-apple-system,sans-serif; }
-a { color:var(--accent); text-underline-offset:3px; } button,select,input { font:inherit; } button,a,select,input,summary { touch-action:manipulation; }
-:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
-.wrap { max-width:1160px; margin:auto; padding:0 28px; } .top { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:22px 0; border-bottom:1px solid var(--line); }
-.wordmark { font-weight:750; letter-spacing:.06em; font-size:.8rem; } .mode { width:auto; max-width:130px; font-size:.8rem; }
-header { padding:38px 0 24px; } .eyebrow { color:var(--accent); font-size:.75rem; font-weight:750; letter-spacing:.15em; text-transform:uppercase; margin:0 0 10px; }
-h1 { font-size:clamp(2rem,5vw,3.5rem); line-height:1.08; letter-spacing:-.05em; max-width:760px; margin:0 0 18px; } h1 span { color:var(--accent); } .intro { max-width:720px; color:var(--muted); margin:0 0 18px; }
-.notice { padding:14px 18px; border-left:3px solid var(--accent); background:var(--soft); font-size:.85rem; } .notice a { white-space:normal; } .stamp { color:var(--muted); font-size:.8rem; margin:18px 0 24px; }
-.layout:has(aside[hidden]) { grid-template-columns:minmax(0,1fr); } .quick { display:flex; flex-wrap:wrap; gap:18px; margin:18px 0; font-size:.85rem; font-weight:650; } .raum-name a { color:inherit; text-decoration:none; } .raum-name a:hover { text-decoration:underline; } .layout { display:grid; grid-template-columns:285px minmax(0,1fr); gap:28px; align-items:start; } .panel { background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:20px; } aside { position:sticky; top:18px; }
-h2 { font-size:1.2rem; margin:0; letter-spacing:-.02em; } .panel h2 { margin-bottom:16px; } label { display:block; font-size:.8rem; font-weight:650; margin:14px 0 6px; }
-select,input { width:100%; min-width:0; max-width:100%; padding:10px 9px; min-height:44px; color:var(--text); background:var(--bg); border:1px solid var(--line); border-radius:8px; } button { cursor:pointer; border:1px solid var(--line); color:var(--accent); background:var(--surface); padding:10px 14px; border-radius:8px; min-height:44px; }
-.date-range { min-width:0; margin:18px 0 4px; padding:12px; border:1px solid var(--accent); border-radius:10px; background:var(--soft); } .date-range legend { padding:0 5px; font-size:.85rem; font-weight:750; } .date-grid { display:grid; gap:10px; } .date-range label { margin-top:0; } .date-range input { background:var(--surface); } .date-error { color:var(--text); font-size:.8rem; margin:10px 0 0; } .reset { width:100%; margin-top:18px; } .hint { font-size:.75rem; color:var(--muted); margin-bottom:0; } .results-head { display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin:0 0 16px; } .results-head p { color:var(--muted); font-size:.8rem; margin:4px 0 0; }
-.jump { display:inline-block; background:var(--accent); color:var(--bg); text-decoration:none; border-radius:8px; padding:10px 14px; font-size:.8rem; font-weight:700; } .tag { margin-bottom:16px; background:var(--surface); border:1px solid var(--line); border-radius:16px; overflow:hidden; }
-.tag-kopf { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:4px; background:var(--soft); padding:13px 18px; } .tag-kopf h3 { margin:0; font-size:.95rem; } .tag-anzahl { color:var(--muted); font-size:.75rem; }
-.raum-termine { display:grid; grid-template-columns:minmax(0,180px) minmax(0,1fr); gap:14px; padding:15px 18px; border-top:1px solid var(--line); } .raum-name { font-size:.85rem; font-weight:650; } .adresse { display:block; color:var(--muted); font-size:.7rem; font-weight:400; margin-top:4px; } .zeiten { display:flex; flex-wrap:wrap; gap:7px; align-content:start; }
-.slot { display:inline-flex; align-items:center; gap:5px; padding:9px 11px; min-height:44px; border:1px solid var(--line); border-radius:8px; font-size:.85rem; font-variant-numeric:tabular-nums; text-decoration:none; } .slot:hover { background:var(--soft); border-color:var(--accent); } .slot b { font-size:.55rem; border-radius:3px; padding:2px 4px; background:var(--new); color:var(--newtext); } .platz { color:var(--muted); font-size:.7rem; }
-.room-section { margin:32px 0; border-top:1px solid var(--line); padding-top:22px; } summary { cursor:pointer; padding:8px 0; font-weight:700; } .room-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; margin-top:16px; } .raum-info { min-width:0; } .raum-info h3 { font-size:1rem; margin:0 0 12px; } dl { margin:0 0 18px; font-size:.8rem; } dt { color:var(--muted); margin-top:10px; } dd { margin:1px 0 0; } .raum-info a { font-size:.8rem; } .muted { color:var(--muted); font-size:.8rem; } footer { padding:22px 0 30px; border-top:1px solid var(--line); font-size:.8rem; color:var(--muted); } .empty { padding:24px; background:var(--soft); border-radius:12px; }
-@media(max-width:760px) { .wrap { padding:0 16px; } .top { padding:14px 0; } header { padding-top:26px; } .layout { grid-template-columns:minmax(0,1fr); gap:24px; } aside { position:static; } .filter-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 12px; } .wide { grid-column:1/-1; } .date-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .panel { padding:16px; } .panel h2 { margin-bottom:8px; } .raum-termine { grid-template-columns:minmax(0,1fr); gap:10px; padding:14px; } .adresse { margin-top:2px; } .tag-kopf { padding:12px 14px; } .room-grid { grid-template-columns:minmax(0,1fr); } .jump { width:100%; text-align:center; } .results-head { gap:14px; } }
-
-/* Verbotene Bibliothek: lokale Systemschriften und originale Inline-Grafik. */
-
-body { background-color:var(--bg); background-image:radial-gradient(ellipse at 80% 6%,var(--glow),transparent 48%); background-attachment:fixed; }
-.wrap { position:relative; } .top { border-bottom:1px solid var(--line); } .wordmark { letter-spacing:.15em; font-size:.73rem; }
-
-.hero { display:grid; grid-template-columns:minmax(0,1fr) 290px; align-items:center; gap:24px; margin:4px 0 20px; } .hero-copy { min-width:0; } header { padding-top:22px; } .eyebrow { font-size:.68rem; letter-spacing:.16em; }
-h1 { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:clamp(2.5rem,5.3vw,4.6rem); line-height:1.03; letter-spacing:-.045em; margin-bottom:20px; } h1 span { font-style:italic; } .intro { max-width:580px; font-size:.92rem; margin-bottom:0; }
-.hero-art { height:285px; width:100%; color:var(--accent); position:relative; } .hero-art svg { height:100%; width:100%; overflow:visible; } .hero-art:after { content:''; position:absolute; inset:70% -8% -5%; background:radial-gradient(ellipse,var(--glow),transparent 67%); pointer-events:none; }
-.panel,.tag { border-radius:4px; box-shadow:0 8px 28px #0000000a; }  .panel h2, .room-section summary { font-family:Georgia,'Times New Roman',serif; font-weight:400; font-size:1.35rem; letter-spacing:-.02em; } .notice { border-left-width:2px; border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--soft); } .quick { font-weight:500; } .stamp { font-size:.73rem; margin:14px 0 22px; }
-select,input,button,.slot { border-radius:3px; } .date-range { border-radius:3px; } .date-range legend { letter-spacing:.03em; } .tag-kopf { background:var(--soft); } .tag-kopf h3 { font-family:Georgia,'Times New Roman',serif; font-size:1.05rem; font-weight:400; } .slot { background:var(--chip); border-color:var(--line); } .slot:hover { background:var(--soft); box-shadow:inset 0 0 0 1px var(--accent); } .jump { border-radius:3px; text-transform:uppercase; letter-spacing:.07em; font-size:.7rem; padding:13px 16px; } .raum-info h3 { font-family:Georgia,'Times New Roman',serif; font-size:1.2rem; font-weight:400; } .room-section { border-top:1px solid var(--accent); } .results-head h2 { font-weight:500; }
-@media(max-width:760px) {   header { padding-top:24px; } .hero { position:relative; grid-template-columns:minmax(0,1fr); min-height:250px; margin:0 0 22px; } .hero-copy { position:relative; z-index:1; } .hero-art { position:absolute; right:-2px; top:12px; width:145px; height:225px; opacity:.15; } h1 { font-size:2.65rem; line-height:1.06; max-width:340px; } .intro { max-width:310px; } .eyebrow { max-width:230px; } .panel { border-radius:4px; } .notice { font-size:.8rem; } .stamp { font-size:.72rem; } }
-/* Kompakte Übersicht: Termine vor Dekoration. */
-.wrap { max-width:1000px; } .top { padding:10px 0; } .compact-header { padding:18px 0 0; }
-.compact-header h1 { font-size:1.65rem; line-height:1.15; margin:0 0 10px; max-width:none; letter-spacing:-.03em; }
-.compact-header h1 span { font-style:normal; } .notice { padding:8px 10px; margin:0; font-size:.75rem; }
-.stamp { margin:8px 0 14px; font-size:.7rem; } .quick-search { padding:14px; margin-bottom:18px; }
-.room-picker>summary { font-family:inherit; font-size:.85rem; padding:8px 0; min-height:44px; }
-#selected-room { display:inline-block; color:var(--accent); margin-left:8px; }
-.room-buttons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:10px 0; }
-.room-choice { text-align:left; color:var(--text); min-width:0; padding:10px; line-height:1.3; }
-.room-choice strong { display:block; font-size:.8rem; } .room-choice span { display:block; font-size:.67rem; color:var(--muted); margin-top:4px; }
-.room-choice .room-count { color:var(--accent); } .room-choice[aria-pressed=true] { border-color:var(--accent); background:var(--soft); box-shadow:inset 0 0 0 1px var(--accent); }
-.all-rooms { grid-column:1/-1; } .all-rooms strong,.all-rooms span { display:inline; margin-right:10px; }
-.date-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; } .date-grid label { margin:8px 0 4px; }
-.advanced { margin-top:8px; } .advanced>summary { font:500 .8rem/1.5 system-ui,sans-serif; min-height:44px; padding:12px 0; color:var(--accent); }
-.advanced-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:12px; }
-.search-actions { display:flex; justify-content:space-between; align-items:center; gap:12px; font-size:.75rem; } .search-actions button { font-size:.75rem; padding:5px 10px; }
-.results-head { margin-bottom:10px; } .results-head h2 { font-size:1.05rem; } .results-head p { font-size:.7rem; }
-.results-head .jump { font-size:.65rem; padding:10px; } .room-section { margin-top:24px; }
-@media(max-width:760px) { .wrap { padding:0 12px; } .compact-header { padding-top:14px; } .compact-header h1 { font-size:1.5rem; } .quick-search { padding:12px; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } .results-head { gap:8px; } .jump { width:auto; } }
-
+body { margin:0; background:var(--bg); color:var(--text); font:15px/1.45 system-ui,-apple-system,sans-serif; }
+.wrap { max-width:850px; margin:auto; padding:0 18px; } a { color:var(--accent); text-underline-offset:3px; }
+button,input,select { font:inherit; color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:5px; min-height:44px; padding:9px; max-width:100%; }
+button,summary { cursor:pointer; } button:hover { border-color:var(--accent); } :focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+.sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+.top { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:14px 0 8px; }
+h1 { font:400 1.4rem/1.15 Georgia,serif; margin:0; } h1 span { color:var(--accent); } .mode { font-size:.75rem; min-height:36px; padding:5px; }
+.notice { margin:0 0 18px; color:var(--muted); font-size:.67rem; line-height:1.5; }
+.quick-search { margin-bottom:18px; } .room-bar { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; align-items:start; }
+.room-picker { min-width:0; } .room-picker>summary { display:flex; justify-content:space-between; align-items:center; gap:10px; min-height:56px; background:var(--surface); border:1px solid var(--accent); border-radius:6px; padding:10px 12px; list-style:none; }
+.room-picker>summary::-webkit-details-marker { display:none; } #selected-room { font-size:1.05rem; font-weight:650; overflow-wrap:anywhere; }
+.change-label { font-size:.7rem; color:var(--accent); white-space:nowrap; } .change-label:after { content:' ▾'; }
+#rauminfo { font-size:.75rem; min-height:56px; padding:10px; border-color:transparent; background:transparent; color:var(--accent); }
+.room-bar:has(.room-picker[open]) { grid-template-columns:minmax(0,1fr); } .room-bar:has(.room-picker[open]) #rauminfo { display:none; }
+.room-buttons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:8px 0; }
+.room-choice { min-width:0; text-align:left; padding:10px; overflow-wrap:anywhere; } .room-choice strong { display:block; font-size:.8rem; } .room-choice span { display:block; margin-top:4px; font-size:.7rem; color:var(--muted); }
+.room-choice[aria-pressed=true] { border-color:var(--accent); background:var(--soft); box-shadow:inset 0 0 0 1px var(--accent); } .all-rooms { grid-column:1/-1; } .all-rooms strong,.all-rooms span { display:inline; margin-right:8px; }
+.search-options { margin-top:4px; } .search-options>summary { font-size:.75rem; color:var(--accent); padding:10px 0; min-height:40px; }
+.date-grid,.advanced-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .advanced-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+label { display:block; margin:8px 0 4px; font-size:.75rem; } input,select { width:100%; min-width:0; } .date-error,.hint { font-size:.75rem; } .hint { color:var(--muted); } #zuruecksetzen { font-size:.75rem; margin:8px 0; }
+.results-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:8px; } h2 { font-size:1rem; font-weight:600; margin:0; } .stamp { font-size:.65rem; color:var(--muted); white-space:nowrap; }
+.empty { margin:0; padding:18px 0 12px; color:var(--muted); font-size:.9rem; } .booking-link { display:inline-block; padding:10px 0; font-size:.8rem; }
+.tag { border:1px solid var(--line); background:var(--surface); border-radius:6px; margin-bottom:12px; overflow:hidden; } .tag-kopf { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:10px 12px; background:var(--soft); }
+.tag-kopf h3 { font:400 1rem Georgia,serif; margin:0; } .tag-anzahl { color:var(--muted); font-size:.65rem; }
+.raum-termine { padding:12px; border-top:1px solid var(--line); } .raum-name { font-size:.8rem; margin-bottom:8px; } .adresse { display:block; font-size:.65rem; color:var(--muted); }
+.zeiten { display:flex; flex-wrap:wrap; gap:8px; } .slot { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); padding:10px 11px; min-height:44px; border-radius:4px; text-decoration:none; font-size:.9rem; font-variant-numeric:tabular-nums; }
+.slot:hover { background:var(--soft); border-color:var(--accent); } .platz { color:var(--muted); font-size:.65rem; } .slot b { padding:2px 3px; border-radius:2px; color:var(--newtext); background:var(--new); font-size:.55rem; }
+.single-room .raum-name { display:none; } .single-room .tag-anzahl { display:none; }
+.room-grid { display:grid; gap:12px; margin:10px 0; } .raum-info { min-width:0; padding:12px 0; } .raum-info h3 { font:400 1.25rem Georgia,serif; margin:0 0 10px; } .raum-info p { font-size:.8rem; color:var(--muted); } dl { font-size:.85rem; } dt { color:var(--muted); margin-top:10px; } dd { margin:2px 0; } .raum-info a { font-size:.8rem; }
+dialog { color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:18px; width:min(550px,calc(100% - 24px)); max-height:85vh; overflow:auto; } dialog::backdrop { background:#0009; } .dialog-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; } .dialog-bar button { font-size:.8rem; }
+footer { border-top:1px solid var(--line); margin-top:24px; padding:12px 0 24px; color:var(--muted); font-size:.72rem; } footer summary { padding:8px 0; } .room-section { margin-top:20px; }
+@media(max-width:600px) { .wrap { padding:0 12px; } h1 { font-size:1.15rem; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } #selected-room { font-size:.95rem; } .room-picker>summary { padding:10px; } .change-label { font-size:.62rem; } .results-head { flex-wrap:wrap; gap:3px; } }
 """
-
-# Originale dekorative Vektorgrafik, ohne externe Ressourcen.
 
 
 def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, raum_infos=None):
@@ -370,18 +362,19 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
     zimmer = {zid: f"Zauberakademie – Teil {teile[zid]} · {name}" if zid in teile else name
               for zid, name in zimmer.items()}
     anzahl = Counter(t["zimmer_id"] for t in termine)
-    raum_buttons = [f'<button type="button" class="room-choice all-rooms" data-room="alle" data-label="Alle Zimmer" aria-pressed="true"><strong>Alle Zimmer</strong><span>{len(termine)} frei</span></button>']
+    raum_buttons = []
     karten = []
-    for zid, name in sorted(zimmer.items(), key=lambda item: item[1].casefold()):
+    for zid, name in sorted(zimmer.items(), key=lambda item: (0 if item[0] == "12248" else 1 if item[0] == "12242" else 2, item[1].casefold())):
         stand = f"{anzahl[zid]} frei" if anzahl[zid] else "nichts frei"
         fakten = raum_infos.get(zid, {})
         standort = fakten.get("Standort", "")
         kurzname = f"Zauberakademie {teile[zid]}" if zid in teile else name
-        raum_buttons.append(f'<button type="button" class="room-choice" data-room="{esc(zid)}" data-label="{esc(kurzname)}" aria-pressed="false" aria-label="{esc(name)} ({esc(stand)})"><strong>{esc(kurzname)}</strong><span>{esc(standort)}</span><span class="room-count">{esc(stand)}</span></button>')
+        raum_buttons.append(f'<button type="button" class="room-choice" data-room="{esc(zid)}" data-label="{esc(kurzname)}" data-seite="{esc(ZIMMER_SEITEN.get(zid, WEBSITE))}" aria-pressed="false" aria-label="{esc(name)} ({esc(stand)})"><strong>{esc(kurzname)}</strong><span class="room-count">{esc(stand)}</span></button>')
         daten = ''.join(f'<dt>{esc(k)}</dt><dd>{esc(v)}</dd>' for k, v in fakten.items())
         karten.append(f'''<article class="raum-info panel" id="raum-{esc(zid)}" data-zimmer="{esc(zid)}" data-standort="{esc(standort)}">
 <h3>{esc(name)}</h3><p class="muted">{esc(stand)}</p><dl>{daten}</dl>
 <a href="{esc(ZIMMER_SEITEN.get(zid, WEBSITE))}">Offizielle Raumseite · Bilder &amp; Details ↗</a></article>''')
+    raum_buttons.append(f'<button type="button" class="room-choice all-rooms" data-room="alle" data-label="Alle Zimmer" data-seite="{esc(WEBSITE)}" aria-pressed="false"><strong>Alle Zimmer</strong><span>{len(termine)} frei</span></button>')
     tage = []
     # Nach Raum bündeln: pro Tag nur ein Raumname, kompakte Zeit-Chips statt 2.500 Textzeilen.
     for datum, gruppe in groupby(termine, key=lambda t: t["datum"]):
@@ -406,17 +399,18 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
     HTML_DATEI.write_text(f'''<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Freie Escape-Room-Termine Nürnberg</title><style>{STIL}</style></head>
-<body><div class="wrap"><div class="top"><span class="wordmark">ESCAPE · NÜRNBERG</span><div class="js-only" hidden><label for="modus" style="display:inline">Ansicht </label><select class="mode" id="modus"><option value="auto">Automatisch</option><option value="light">Hell</option><option value="dark">Dunkel</option></select></div></div>
-<header class="compact-header"><h1>Freie Escape-Termine <span>Nürnberg</span></h1><p class="notice">Inoffizielle private Übersicht, ohne Gewähr. <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a></p><p class="stamp">Stand: {esc(abgefragt_um)} · 2× täglich aktualisiert</p></header>
-<section id="filter" class="panel quick-search js-only" aria-label="Terminsuche" hidden>
-<details id="room-picker" class="room-picker"><summary>Raum wählen <strong id="selected-room">Alle Zimmer</strong></summary><div class="room-buttons" role="group" aria-label="Zimmerauswahl">{''.join(raum_buttons)}</div></details>
+<body><div class="wrap"><header class="top"><h1>Escape-Termine <span>Nürnberg</span></h1><div class="js-only" hidden><label class="sr-only" for="modus">Ansicht</label><select class="mode" id="modus"><option value="auto">Auto</option><option value="light">Hell</option><option value="dark">Dunkel</option></select></div></header>
+<p class="notice">Inoffizielle private Übersicht, ohne Gewähr. <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a></p>
+<section id="filter" class="quick-search js-only" aria-label="Terminsuche" hidden>
+<div class="room-bar"><details id="room-picker" class="room-picker"><summary><span class="sr-only">Raum wählen: </span><strong id="selected-room">Zimmer wählen</strong><span class="change-label">Zimmer ändern</span></summary><div class="room-buttons" role="group" aria-label="Zimmerauswahl">{''.join(raum_buttons)}</div></details><button id="rauminfo" type="button">Rauminfo</button></div>
+<details class="search-options"><summary id="search-label">Suche eingrenzen</summary>
 <div class="date-grid"><div><label for="ab">Ab Datum</label><input id="ab" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div><div><label for="bis">Bis Datum</label><input id="bis" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div></div><p class="date-error" id="datum-fehler" role="status" hidden>Das Enddatum liegt vor dem Startdatum.</p>
-<details class="advanced"><summary>Erweiterte Suche</summary><div class="advanced-grid"><div><label for="wochentag">Wochentag</label><select id="wochentag"><option value="">Alle Tage</option>{wochen_optionen}</select></div><div><label for="tageszeit">Tageszeit</label><select id="tageszeit"><option value="">Jederzeit</option><option value="vormittag">Vor 12 Uhr</option><option value="nachmittag">12–18 Uhr</option><option value="abend">Ab 18 Uhr</option></select></div><div><label for="spieler">Spieleranzahl</label><select id="spieler"><option value="">Alle Größen</option>{spieler_optionen}</select></div></div><p class="hint">Spielerfilter: freie Plätze und bekannte Mindestbestellmenge je Termin.</p></details>
-<div class="search-actions"><a href="#raeume">Raum-Infos &amp; Altersregeln</a><button id="zuruecksetzen" type="button">Zurücksetzen</button></div></section>
-<main id="termine"><div class="results-head"><div><h2 id="anzahl" aria-live="polite">{len(termine)} freie Termine</h2><p>Uhrzeit anklicken zum Anbieter · P. = freie Plätze · NEU = seit letztem Lauf</p></div><a class="jump js-only" id="naechste" href="#termine" hidden>Nächste freie Termine ↓</a></div>
-<noscript><p>Filter benötigen JavaScript. Alle Termine und Raum-Infos sind unten sichtbar.</p></noscript><p class="empty" id="leer" {'hidden' if termine else ''}>Keine freien Termine für diese Auswahl im abgefragten Zeitraum. Wählt ein anderes Zimmer oder setzt die Filter zurück.</p>{''.join(tage)}</main>
+<div class="advanced-grid"><div><label for="wochentag">Wochentag</label><select id="wochentag"><option value="">Alle Tage</option>{wochen_optionen}</select></div><div><label for="tageszeit">Tageszeit</label><select id="tageszeit"><option value="">Jederzeit</option><option value="vormittag">Vor 12 Uhr</option><option value="nachmittag">12–18 Uhr</option><option value="abend">Ab 18 Uhr</option></select></div><div><label for="spieler">Spieleranzahl</label><select id="spieler"><option value="">Alle Größen</option>{spieler_optionen}</select></div></div><p class="hint">Spielerfilter: freie Plätze und bekannte Mindestbestellmenge je Termin.</p><button id="zuruecksetzen" type="button">Suchfilter zurücksetzen</button></details></section>
+<main id="termine"><div class="results-head"><h2 id="anzahl" aria-live="polite">{len(termine)} freie Termine</h2><span class="stamp">Stand {esc(abgefragt_um)}</span></div>
+<noscript><p>Filter benötigen JavaScript. Alle Termine und Raum-Infos sind unten sichtbar.</p></noscript><p class="empty" id="leer" data-bis="{end.strftime('%d.%m.%Y')}" {'hidden' if termine else ''}>Keine freien Termine für diese Auswahl im abgefragten Zeitraum. </p><a id="buchung" class="booking-link" href="{esc(WEBSITE)}">Beim Anbieter prüfen ↗</a>{''.join(tage)}</main>
 <section class="room-section" id="raeume"><details id="room-details"><summary>Raum-Infos &amp; Altersregeln</summary><p class="muted">Sachliche Angaben aus den Buchungsdaten. Fehlende Angaben werden weggelassen. Bilder, vollständige Teilnahmebedingungen und verbindliche Details findet ihr auf der offiziellen Raumseite.</p><div class="room-grid">{''.join(karten)}</div></details></section>
-<footer>Inoffizielle private Übersicht, ohne Gewähr · <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a><br>Keine Werbung · Kein Tracking · Buchung direkt beim Anbieter</footer></div><script>{AUSWAHL_SKRIPT}</script></body></html>''', encoding="utf-8")
+<dialog id="raum-dialog" aria-labelledby="dialog-title"><div class="dialog-bar"><h2 id="dialog-title">Rauminfo</h2><form method="dialog"><button>Schließen</button></form></div><div id="dialog-inhalt"></div></dialog>
+<footer><details><summary>Hinweise zur Übersicht</summary><p>Aktualisierung zweimal täglich, gegen 10:17 und 16:17 Uhr. Verbindlich ist die Buchung beim Anbieter.</p><p>P. = freie Plätze. NEU = seit dem letzten Lauf erstmals oder wieder frei. Abgefragter Zeitraum: {start.strftime('%d.%m.%Y')}–{end.strftime('%d.%m.%Y')}.</p><p>Keine Werbung, kein Tracking. Raumangaben sind sachliche Auszüge aus den Buchungsdaten. Fehlende Angaben bleiben weg.</p></details></footer></div><script>{AUSWAHL_SKRIPT}</script></body></html>''', encoding="utf-8")
 
 
 def normalisiere_nummer(empfaenger):
