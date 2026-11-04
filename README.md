@@ -14,8 +14,9 @@ Die Seite wird dann umgehend angepasst oder abgeschaltet.
 ## Oberfläche und Raumdaten
 
 Die Datei bleibt vollständig statisch: CSS und JavaScript sind inline, es gibt keine externen
-Schriften, Bilder, Skripte, Tracking- oder API-Anfragen im Browser. Hell/Dunkel folgt zunächst
-der Systemeinstellung und lässt sich über „Ansicht“ umschalten. Die Gestaltung „Verbotene
+Schriften, Bilder, Skripte, Tracking- oder API-Anfragen im Browser. Hell/Dunkel folgt
+ausschließlich der Systemeinstellung. Ein eigener Modusschalter entfällt.
+Suchoptionen und Terminbereich sind durch einen Suchkasten und eine Trennlinie voneinander abgesetzt. Die Gestaltung „Verbotene
 Bibliothek“ kombiniert dunkle Holzfarben und Gold mit einem hellen Pergamentmodus.
 Die Buchschrift verwendet ausschließlich lokale Systemschriften. Ohne JavaScript bleiben alle
 Termine und Raum-Infos lesbar. Die Zimmerauswahl verwendet weiterhin den bisherigen
