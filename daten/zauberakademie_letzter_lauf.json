@@ -1,5 +1,5 @@
 {
-  "abgefragt_um": "04.11.2026 12:24",
+  "abgefragt_um": "04.11.2026 12:45",
   "zimmer": [
     "12098",
     "12146",
@@ -3762,15 +3762,6 @@
       "zimmer": "Sherlock Holmes",
       "datum": "2026-12-05",
       "uhrzeit": "18:10",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-12-05",
-      "uhrzeit": "19:05",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
