@@ -1,0 +1,75 @@
+name: Termine aktualisieren
+
+on:
+  schedule:
+    - cron: "17 10,16 * * *"
+      timezone: "Europe/Berlin"
+  workflow_dispatch:
+    inputs:
+      test_benachrichtigung:
+        description: "Test-Benachrichtigung senden"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  issues: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: termine
+  cancel-in-progress: false
+
+jobs:
+  aktualisieren:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    env:
+      TZ: Europe/Berlin
+      HTML_DATEI: site/index.html
+      NACHRICHT_DATEI: nachricht.txt
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Termine abfragen
+        run: python3 escape_room_slots.py --taeglich --days 120
+
+      - name: Testnachricht vorbereiten
+        if: ${{ inputs.test_benachrichtigung }}
+        run: echo "Test der Benachrichtigung. Kommt diese Mail an, funktioniert die Meldung neuer Termine." > nachricht.txt
+
+      - name: Neue Termine melden
+        run: |
+          if [ -f nachricht.txt ]; then
+            printf '\n\n@%s\n' "$GITHUB_REPOSITORY_OWNER" >> nachricht.txt
+            gh issue create --title "Zauberakademie: neue Termine" --assignee "$GITHUB_REPOSITORY_OWNER" --body-file nachricht.txt
+          fi
+
+      - name: Stand speichern
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add daten
+          git diff --cached --quiet || git commit -m "Stand aktualisieren"
+          for versuch in 1 2 3 4 5; do
+            git push && exit 0
+            sleep 30
+          done
+          exit 1
+
+      - uses: actions/configure-pages@v5
+        if: ${{ !cancelled() && hashFiles('site/index.html') != '' }}
+
+      - uses: actions/upload-pages-artifact@v3
+        if: ${{ !cancelled() && hashFiles('site/index.html') != '' }}
+        with:
+          path: site
+
+      - uses: actions/deploy-pages@v4
+        if: ${{ !cancelled() && hashFiles('site/index.html') != '' }}
+        id: deploy
