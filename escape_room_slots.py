@@ -55,6 +55,21 @@ ZIMMER_SEITEN = {
     "19197": WEBSITE + "prestige/",
 }
 
+# Eckdaten von den verlinkten Raumseiten, manuell geprüft am 05.11.2026.
+# Spielerzahl, Spieldauer in Minuten, Schwierigkeit, Mindestalter, Begleitpersonen unter 16.
+RAUMPROFILE = {
+    "12098": ("2–6", 60, "Mittel", 16, 0),
+    "12146": ("2–6", 60, "Mittel bis schwer", 14, 1),
+    "12200": ("2–6", 60, "Mittel bis schwer", 14, 1),
+    "12239": ("2–6", 60, "Schwer", 14, 1),
+    "12242": ("4–8", 90, "Mittel", 14, 2),
+    "12248": ("4–8", 90, "Mittel bis schwer", 14, 2),
+    "12434": ("2–6", 60, "Mittel", 14, 1),
+    "17163": ("2–6", 75, "Mittel", 16, 0),
+    "18792": ("2–10", 120, "Einfach", 10, 0),
+    "19197": ("2–6", 90, "Mittel bis schwer", 16, 0),
+}
+
 # Dateien für den täglichen Lauf liegen neben dem Skript (launchd startet in "/").
 ORDNER = Path(__file__).resolve().parent
 KONFIG_DATEI = ORDNER / "zauberakademie_config.json"
@@ -62,7 +77,8 @@ STAND_DATEI = ORDNER / "daten" / "zauberakademie_letzter_lauf.json"
 HTML_DATEI = Path(os.environ.get("HTML_DATEI", ORDNER / "zauberakademie_freie_termine.html"))
 # Auf GitHub gibt es kein iMessage: die Nachricht landet hier, der Workflow macht ein Issue daraus.
 NACHRICHT_DATEI = os.environ.get("NACHRICHT_DATEI")
-KONTAKT = "https://github.com/Lewa33/escape-termine-nuernberg/issues"
+PROJEKT = "https://github.com/Lewa33/escape-termine-nuernberg"
+KONTAKT = PROJEKT + "/issues"
 MAX_ZEILEN_NACHRICHT = 15
 
 
@@ -236,6 +252,9 @@ AUSWAHL_SKRIPT = r"""
   const roomButtons = Array.from(document.querySelectorAll('.room-choice'));
   let selectedRoom = roomButtons.some(button => button.dataset.room === '12248') ? '12248' : 'alle';
   const dialog = document.getElementById('raum-dialog');
+  document.getElementById('mail-hinweis').addEventListener('click', () => {
+    document.getElementById('mail-dialog').showModal();
+  });
   document.getElementById('dialog-inhalt').append(document.querySelector('#raeume .room-grid'));
   document.getElementById('raeume').hidden = true;
   function openInfo(room) {
@@ -309,6 +328,16 @@ AUSWAHL_SKRIPT = r"""
 """
 
 
+TUER = """
+<svg class="door-mark" viewBox="0 0 28 34" width="28" height="34" aria-hidden="true" fill="none">
+  <path d="M4 30V14C4 8 9 4 14 1c5 3 10 7 10 13v16Z" fill="var(--soft)" stroke="currentColor"/>
+  <path d="M7.5 30V14c0-4 3-7 6.5-9 3.5 2 6.5 5 6.5 9v16Z" fill="var(--surface)" stroke="currentColor"/>
+  <path d="M14 6v24m-5-14h10M2 30h24M6 33h16" stroke="currentColor" stroke-opacity=".7"/>
+  <circle cx="11.5" cy="22" r="1" fill="currentColor"/>
+  <circle cx="16.5" cy="22" r="1" fill="currentColor"/>
+</svg>
+"""
+
 STIL = """
 :root { color-scheme:light dark; --bg:#f0e6d0; --surface:#faf3e2; --text:#30251e; --muted:#6e5d49; --line:#cdbb96; --accent:#775121; --soft:#e8dabe; --new:#f1d18e; --newtext:#5d3416; }
 @media(prefers-color-scheme:dark) { :root { --bg:#181311; --surface:#251f1a; --text:#f0e6d2; --muted:#c2b298; --line:#51412f; --accent:#dfbb78; --soft:#32281e; --new:#593d21; --newtext:#ffe6ad; } }
@@ -318,7 +347,8 @@ body { margin:0; background:var(--bg); color:var(--text); font:15px/1.45 system-
 button,input,select { font:inherit; color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:5px; min-height:44px; padding:9px; max-width:100%; }
 button,summary { cursor:pointer; } button:hover { border-color:var(--accent); } :focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
-.top { display:flex; justify-content:space-between; align-items:center; gap:10px; padding:14px 0 8px; }
+.top { display:flex; align-items:center; gap:8px; padding:14px 0 8px; }
+.door-mark { flex:none; color:var(--accent); }
 h1 { font:400 1.9rem/1.15 Georgia,serif; margin:0; } h1 span { color:var(--accent); }
 .notice { margin:0 0 18px; color:var(--muted); font-size:.67rem; line-height:1.5; }
 .quick-search { margin-bottom:22px; padding:14px; background:var(--soft); border:1px solid var(--line); border-radius:10px; }
@@ -330,8 +360,13 @@ h1 { font:400 1.9rem/1.15 Georgia,serif; margin:0; } h1 span { color:var(--accen
 .room-bar:has(.room-picker[open]) { grid-template-columns:minmax(0,1fr); } .room-bar:has(.room-picker[open]) #rauminfo { display:none; }
 .room-buttons { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin:8px 0; }
 .room-choice { min-width:0; text-align:left; padding:10px; overflow-wrap:anywhere; } .room-choice strong { display:block; font-size:.8rem; } .room-choice span { display:block; margin-top:4px; font-size:.7rem; color:var(--muted); }
+.room-choice .room-meta { font-size:.69rem; line-height:1.35; }
+.room-choice .room-count { color:var(--accent); }
 .room-choice[aria-pressed=true] { border-color:var(--accent); background:var(--soft); box-shadow:inset 0 0 0 1px var(--accent); } .all-rooms { grid-column:1/-1; } .all-rooms strong,.all-rooms span { display:inline; margin-right:8px; }
-.search-options { margin-top:4px; } .search-options>summary { font-size:.75rem; color:var(--accent); padding:10px 0; min-height:40px; }
+.search-actions { position:relative; margin-top:4px; }
+.search-options>summary { font-size:.75rem; color:var(--accent); padding:10px 106px 10px 0; min-height:40px; }
+#mail-hinweis { position:absolute; top:0; right:0; min-height:40px; background:transparent; border-color:transparent; color:var(--accent); font-size:.75rem; }
+#mail-dialog p,#mail-dialog ol { font-size:.85rem; } #mail-dialog li + li { margin-top:8px; }
 .date-grid,.advanced-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; } .advanced-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
 label { display:block; margin:8px 0 4px; font-size:.75rem; } input,select { width:100%; min-width:0; } .date-error,.hint { font-size:.75rem; } .hint { color:var(--muted); } #zuruecksetzen { font-size:.75rem; margin:8px 0; }
 .results-head { display:flex; justify-content:space-between; align-items:baseline; gap:10px; margin-bottom:8px; } h2 { font-size:1rem; font-weight:600; margin:0; } .stamp { font-size:.65rem; color:var(--muted); white-space:nowrap; }
@@ -342,15 +377,18 @@ label { display:block; margin:8px 0 4px; font-size:.75rem; } input,select { widt
 .zeiten { display:flex; flex-wrap:wrap; gap:8px; } .slot { display:inline-flex; align-items:center; gap:5px; border:1px solid var(--line); padding:10px 11px; min-height:44px; border-radius:4px; text-decoration:none; font-size:.9rem; font-variant-numeric:tabular-nums; }
 .slot:hover { background:var(--soft); border-color:var(--accent); } .platz { color:var(--muted); font-size:.65rem; } .slot b { padding:2px 3px; border-radius:2px; color:var(--newtext); background:var(--new); font-size:.55rem; }
 .single-room .raum-name { display:none; } .single-room .tag-anzahl { display:none; }
-.room-grid { display:grid; gap:12px; margin:10px 0; } .raum-info { min-width:0; padding:12px 0; } .raum-info h3 { font:400 1.25rem Georgia,serif; margin:0 0 10px; } .raum-info p { font-size:.8rem; color:var(--muted); } dl { font-size:.85rem; } dt { color:var(--muted); margin-top:10px; } dd { margin:2px 0; } .raum-info a { font-size:.8rem; }
+.room-grid { display:grid; gap:12px; margin:10px 0; } .raum-info { min-width:0; padding:12px 0; } .raum-info h3 { font:400 1.25rem Georgia,serif; margin:0 0 10px; } .raum-info p { font-size:.8rem; color:var(--muted); } .room-facts { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; font-size:.85rem; }
+.room-facts div { background:var(--soft); border-radius:5px; padding:8px 10px; overflow-wrap:anywhere; }
+.room-facts .wide { grid-column:1/-1; }
+.room-facts dt { color:var(--muted); font-size:.72rem; } .room-facts dd { margin:2px 0 0; } .raum-info a { font-size:.8rem; }
 dialog { color:var(--text); background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:18px; width:min(550px,calc(100% - 24px)); max-height:85vh; overflow:auto; } dialog::backdrop { background:#0009; } .dialog-bar { display:flex; justify-content:space-between; align-items:center; gap:12px; } .dialog-bar button { font-size:.8rem; }
 footer { border-top:1px solid var(--line); margin-top:24px; padding:12px 0 24px; color:var(--muted); font-size:.72rem; } footer summary { padding:8px 0; } .room-section { margin-top:20px; }
-@media(max-width:600px) { .wrap { padding:0 12px; } h1 { font-size:1.65rem; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } #selected-room { font-size:.95rem; } .room-picker>summary { padding:10px; } .change-label { font-size:.62rem; } .results-head { flex-wrap:wrap; gap:3px; } }
+@media(max-width:600px) { .wrap { padding:0 12px; } h1 { font-size:1.65rem; } .door-mark { width:24px; height:auto; } .room-buttons { grid-template-columns:repeat(2,minmax(0,1fr)); } .advanced-grid { grid-template-columns:1fr; gap:0; } #selected-room { font-size:.95rem; } .room-picker>summary { padding:10px; } .change-label { font-size:.62rem; } .results-head { flex-wrap:wrap; gap:3px; } }
 """
 
 
 def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, raum_infos=None):
-    """Eine eigenständige HTML-Datei, ausschließlich mit escapten API-Fakten."""
+    """Eine eigenständige HTML-Datei mit escapten Terminen und Raumfakten."""
     raum_infos = raum_infos or {}
     # Teil 2 heißt in der API nur „Die Rückkehr des Dunklen Lords“.
     # Nur die HTML-Anzeige ergänzen; IDs, API-Namen im Stand und Meldungen bleiben gleich.
@@ -365,10 +403,34 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
         fakten = raum_infos.get(zid, {})
         standort = fakten.get("Standort", "")
         kurzname = f"Zauberakademie {teile[zid]}" if zid in teile else name
-        raum_buttons.append(f'<button type="button" class="room-choice" data-room="{esc(zid)}" data-label="{esc(kurzname)}" data-seite="{esc(ZIMMER_SEITEN.get(zid, WEBSITE))}" aria-pressed="false" aria-label="{esc(name)} ({esc(stand)})"><strong>{esc(kurzname)}</strong><span class="room-count">{esc(stand)}</span></button>')
-        daten = ''.join(f'<dt>{esc(k)}</dt><dd>{esc(v)}</dd>' for k, v in fakten.items())
+        kurzinfo = []
+        if zid in RAUMPROFILE:
+            spieler, minuten, schwierig, alter, begleiter = RAUMPROFILE[zid]
+            dauer = f"{minuten} Min."
+            alter_kurz = f"ab {alter}" + ("*" if begleiter else "")
+            kurzinfo = [f"{spieler} Spieler · {dauer}", f"{schwierig} · {alter_kurz}"]
+            fakten = {
+                "Spielerzahl": f"{spieler} Personen",
+                "Dauer": f"{minuten} Minuten",
+                "Schwierigkeit": schwierig,
+                "Mindestalter": f"Ab {alter} Jahren",
+            }
+            if standort:
+                fakten["Standort"] = standort
+            if begleiter:
+                personen = "1 erwachsene Person" if begleiter == 1 else f"{begleiter} erwachsene Personen"
+                fakten["Begleitung"] = f"Mit 14 oder 15 Jahren: mindestens {personen} als Begleitung im Spiel."
+        meta = "".join(f'<span class="room-meta">{esc(zeile)}</span>' for zeile in kurzinfo)
+        beschriftung = f"{name} ({stand})"
+        if kurzinfo:
+            beschriftung += ", " + ", ".join(kurzinfo).replace("*", ", Begleitregeln in der Rauminfo")
+        raum_buttons.append(f'<button type="button" class="room-choice" data-room="{esc(zid)}" data-label="{esc(kurzname)}" data-seite="{esc(ZIMMER_SEITEN.get(zid, WEBSITE))}" aria-pressed="false" aria-label="{esc(beschriftung)}"><strong>{esc(kurzname)}</strong>{meta}<span class="room-count">{esc(stand)}</span></button>')
+        daten = "".join(
+            f'<div class="{("wide" if k in ("Standort", "Alter", "Begleitung") else "")}"><dt>{esc(k)}</dt><dd>{esc(v)}</dd></div>'
+            for k, v in fakten.items()
+        )
         karten.append(f'''<article class="raum-info panel" id="raum-{esc(zid)}" data-zimmer="{esc(zid)}" data-standort="{esc(standort)}">
-<h3>{esc(name)}</h3><p class="muted">{esc(stand)}</p><dl>{daten}</dl>
+<h3>{esc(name)}</h3><p class="muted">{esc(stand)}</p><dl class="room-facts">{daten}</dl>
 <a href="{esc(ZIMMER_SEITEN.get(zid, WEBSITE))}">Offizielle Raumseite · Bilder &amp; Details ↗</a></article>''')
     raum_buttons.append(f'<button type="button" class="room-choice all-rooms" data-room="alle" data-label="Alle Zimmer" data-seite="{esc(WEBSITE)}" aria-pressed="false"><strong>Alle Zimmer</strong><span>{len(termine)} frei</span></button>')
     tage = []
@@ -395,18 +457,25 @@ def schreibe_html(zimmer, termine, neue_schluessel, abgefragt_um, start, end, ra
     HTML_DATEI.write_text(f'''<!doctype html>
 <html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex">
 <title>Freie Escape-Room-Termine Nürnberg</title><style>{STIL}</style></head>
-<body><div class="wrap"><header class="top"><h1>Escape-Termine <span>Nürnberg</span></h1></header>
+<body><div class="wrap"><header class="top">{TUER}<h1>Escape-Termine <span>Nürnberg</span></h1></header>
 <p class="notice">Inoffizielle private Übersicht, ohne Gewähr. <a href="{esc(KONTAKT)}">Fehler oder Einwände melden</a></p>
 <section id="filter" class="quick-search js-only" aria-label="Terminsuche" hidden>
-<div class="room-bar"><details id="room-picker" class="room-picker"><summary><span class="sr-only">Raum wählen: </span><strong id="selected-room">Zimmer wählen</strong><span class="change-label">Zimmer ändern</span></summary><div class="room-buttons" role="group" aria-label="Zimmerauswahl">{''.join(raum_buttons)}</div></details><button id="rauminfo" type="button">Rauminfo</button></div>
+<div class="room-bar"><details id="room-picker" class="room-picker"><summary><span class="sr-only">Raum wählen: </span><strong id="selected-room">Zimmer wählen</strong><span class="change-label">Ändern</span></summary><div class="room-buttons" role="group" aria-label="Zimmerauswahl">{''.join(raum_buttons)}</div><p class="hint">* Begleitregeln stehen in der Rauminfo.</p></details><button id="rauminfo" type="button">Rauminfo</button></div>
+<div class="search-actions">
 <details class="search-options"><summary id="search-label">Suche eingrenzen</summary>
 <div class="date-grid"><div><label for="ab">Ab Datum</label><input id="ab" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div><div><label for="bis">Bis Datum</label><input id="bis" type="date" min="{start.isoformat()}" max="{end.isoformat()}" aria-describedby="datum-fehler"></div></div><p class="date-error" id="datum-fehler" role="status" hidden>Das Enddatum liegt vor dem Startdatum.</p>
-<div class="advanced-grid"><div><label for="wochentag">Wochentag</label><select id="wochentag"><option value="">Alle Tage</option>{wochen_optionen}</select></div><div><label for="tageszeit">Tageszeit</label><select id="tageszeit"><option value="">Jederzeit</option><option value="vormittag">Vor 12 Uhr</option><option value="nachmittag">12–18 Uhr</option><option value="abend">Ab 18 Uhr</option></select></div><div><label for="spieler">Spieleranzahl</label><select id="spieler"><option value="">Alle Größen</option>{spieler_optionen}</select></div></div><p class="hint">Spielerfilter: freie Plätze und bekannte Mindestbestellmenge je Termin.</p><button id="zuruecksetzen" type="button">Suchfilter zurücksetzen</button></details></section>
+<div class="advanced-grid"><div><label for="wochentag">Wochentag</label><select id="wochentag"><option value="">Alle Tage</option>{wochen_optionen}</select></div><div><label for="tageszeit">Tageszeit</label><select id="tageszeit"><option value="">Jederzeit</option><option value="vormittag">Vor 12 Uhr</option><option value="nachmittag">12–18 Uhr</option><option value="abend">Ab 18 Uhr</option></select></div><div><label for="spieler">Spieleranzahl</label><select id="spieler"><option value="">Alle Größen</option>{spieler_optionen}</select></div></div><p class="hint">Spielerfilter: freie Plätze und bekannte Mindestbestellmenge je Termin.</p><button id="zuruecksetzen" type="button">Suchfilter zurücksetzen</button></details>
+<button id="mail-hinweis" type="button" aria-haspopup="dialog">E-Mail-Hinweis</button></div></section>
 <main id="termine"><div class="results-head"><h2 id="anzahl" aria-live="polite">{len(termine)} freie Termine</h2><span class="stamp">Stand {esc(abgefragt_um)}</span></div>
 <noscript><p>Filter benötigen JavaScript. Alle Termine und Raum-Infos sind unten sichtbar.</p></noscript><p class="empty" id="leer" data-bis="{end.strftime('%d.%m.%Y')}" {'hidden' if termine else ''}>Keine freien Termine für diese Auswahl im abgefragten Zeitraum. </p><a id="buchung" class="booking-link" href="{esc(WEBSITE)}">Beim Anbieter prüfen ↗</a>{''.join(tage)}</main>
-<section class="room-section" id="raeume"><details id="room-details"><summary>Raum-Infos &amp; Altersregeln</summary><p class="muted">Sachliche Angaben aus den Buchungsdaten. Fehlende Angaben werden weggelassen. Bilder, vollständige Teilnahmebedingungen und verbindliche Details findet ihr auf der offiziellen Raumseite.</p><div class="room-grid">{''.join(karten)}</div></details></section>
+<section class="room-section" id="raeume"><details id="room-details"><summary>Raum-Infos &amp; Altersregeln</summary><p class="muted">Sachliche Angaben aus den Buchungsdaten und von den offiziellen Raumseiten. Fehlende Angaben werden weggelassen. Bilder, vollständige Teilnahmebedingungen und verbindliche Details findet ihr auf der offiziellen Raumseite.</p><div class="room-grid">{''.join(karten)}</div></details></section>
 <dialog id="raum-dialog" aria-labelledby="dialog-title"><div class="dialog-bar"><h2 id="dialog-title">Rauminfo</h2><form method="dialog"><button>Schließen</button></form></div><div id="dialog-inhalt"></div></dialog>
-<footer><details><summary>Hinweise zur Übersicht</summary><p>Aktualisierung zweimal täglich, gegen 10:17 und 16:17 Uhr. Verbindlich ist die Buchung beim Anbieter.</p><p>P. = freie Plätze. NEU = seit dem letzten Lauf erstmals oder wieder frei. Abgefragter Zeitraum: {start.strftime('%d.%m.%Y')}–{end.strftime('%d.%m.%Y')}.</p><p>Keine Werbung, kein Tracking. Raumangaben sind sachliche Auszüge aus den Buchungsdaten. Fehlende Angaben bleiben weg.</p></details></footer></div><script>{AUSWAHL_SKRIPT}</script></body></html>''', encoding="utf-8")
+<dialog id="mail-dialog" aria-labelledby="mail-title"><div class="dialog-bar"><h2 id="mail-title">E-Mail-Hinweis</h2><form method="dialog"><button>Schließen</button></form></div>
+<p>Für neue freie Termine der <strong>Zauberakademie 1</strong> gibt es Meldungen über GitHub. Du brauchst dafür ein GitHub-Konto.</p>
+<ol><li>Im <a href="{esc(PROJEKT)}">GitHub-Projekt ↗</a> bei <strong>Watch → Custom → Issues</strong> ein Häkchen setzen.</li>
+<li>In den <a href="https://github.com/settings/notifications">GitHub-Einstellungen ↗</a> unter <strong>Watching</strong> die Zustellung per E-Mail aktivieren.</li></ol>
+<p>So erhältst du auch E-Mails zu anderen Issues dieses Projekts.</p></dialog>
+<footer><details><summary>Hinweise zur Übersicht</summary><p>Aktualisierung zweimal täglich, gegen 10:17 und 16:17 Uhr. Verbindlich ist die Buchung beim Anbieter.</p><p>P. = freie Plätze. NEU = seit dem letzten Lauf erstmals oder wieder frei. Abgefragter Zeitraum: {start.strftime('%d.%m.%Y')}–{end.strftime('%d.%m.%Y')}.</p><p>Keine Werbung, kein Tracking. Raumangaben stammen aus den Buchungsdaten und von den verlinkten offiziellen Raumseiten. Fehlende Angaben bleiben weg.</p></details></footer></div><script>{AUSWAHL_SKRIPT}</script></body></html>''', encoding="utf-8")
 
 
 def normalisiere_nummer(empfaenger):
