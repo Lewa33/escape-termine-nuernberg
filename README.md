@@ -17,15 +17,16 @@ Die Datei bleibt vollständig statisch: CSS und JavaScript sind inline, es gibt 
 Schriften, Bilder, Skripte, Tracking- oder API-Anfragen im Browser. Hell/Dunkel folgt
 ausschließlich der Systemeinstellung. Ein eigener Modusschalter entfällt.
 Suchoptionen und Terminbereich sind durch einen Suchkasten und eine Trennlinie voneinander abgesetzt. Die Gestaltung „Verbotene
-Bibliothek“ kombiniert dunkle Holzfarben und Gold mit einem hellen Pergamentmodus.
+Bibliothek“ kombiniert dunkle Holzfarben und Gold mit einem hellen Pergamentmodus. Eine kleine
+selbst gezeichnete Tür aus Inline-SVG steht neben dem Seitentitel.
 Die Buchschrift verwendet ausschließlich lokale Systemschriften. Ohne JavaScript bleiben alle
 Termine und Raum-Infos lesbar. Die Zimmerauswahl verwendet weiterhin den bisherigen
 localStorage-Schlüssel; blockierter Speicher verhindert die Filterung nicht.
 
-Im Mittelpunkt stehen die Zimmerauswahl und die freien Uhrzeiten je Tag. „Zimmer ändern“
-öffnet Schaltflächen für alle Räume. Ohne gemerkte Auswahl startet die Seite mit Zauberakademie 2;
+Im Mittelpunkt stehen die Zimmerauswahl und die freien Uhrzeiten je Tag. „Ändern“
+öffnet Schaltflächen für alle Räume mit den vier wichtigsten Eckdaten. Ohne gemerkte Auswahl startet die Seite mit Zauberakademie 2;
 eine vorhandene Auswahl bleibt erhalten. Bei einem gewählten Zimmer werden Name und Adresse
-nicht bei jedem Tag wiederholt. „Rauminfo“ öffnet Standort, Altersregeln und offiziellen Link
+nicht bei jedem Tag wiederholt. „Rauminfo“ öffnet Spielerzahl, Dauer, Schwierigkeit, Standort, Altersregeln und den offiziellen Link
 in einem separaten Dialog. Ohne JavaScript stehen diese Angaben weiterhin unter den Terminen.
 
 „Suche eingrenzen“ enthält Start-/Enddatum, Wochentag, Tageszeit und Spielerzahl und ist
@@ -40,7 +41,17 @@ Raum-Fakten werden während der bisherigen Tagesabfragen aus `location`, `seats`
 `additionalInfo` und `metaDescription` gelesen. Es gibt keine weiteren Requests je Raum.
 API-HTML wird nur zur Faktenerkennung gelesen und niemals als Markup ausgegeben.
 Alle dynamischen Werte werden beim Schreiben der HTML-Datei escaped.
-Altersbedingungen mit Begleitpersonen bleiben als Bedingungen erhalten.
+Spielerzahl, Spieldauer, Schwierigkeit und Mindestalter werden für die zehn bekannten
+Räume durch die am 05.11.2026 manuell geprüften Angaben der offiziellen Raumseiten
+ergänzt (RAUMPROFILE). Diese Angaben haben bei Abweichungen Vorrang. Zum Beispiel
+nennt Auroras Raumseite „einfach“ und die API „leicht bis mittel“. Begleitregeln
+werden beim angegebenen Mindestalter berücksichtigt. Die Spielerzahl aus dem Raumprofil
+ist unabhängig vom Spielerfilter für konkrete Termine.
+
+Über „E-Mail-Hinweis“ lässt sich die Zustellung der GitHub-Meldungen für
+Zauberakademie 1 einrichten. GitHub-Konto und aktivierte E-Mail-Zustellung sind
+erforderlich. Ein Abo für Issues dieses Projekts umfasst auch andere Issues.
+Die Terminseite erfasst keine E-Mail-Adressen.
 
 ### Tatsächlich fehlende Angaben (API-Stichprobe vom 04.11.2026)
 
@@ -54,12 +65,11 @@ Altersbedingungen mit Begleitpersonen bleiben als Bedingungen erhalten.
   bei den anderen neun Zimmern fehlt eine Angabe.
 - **Mindestalter:** Bei „Auroras Magischer Würfel“ fehlt es. „Steampunk Puppenspieler“,
   „Das Geheimnis der toten Mönche“ und „Die Abenteuer des Halbling“ nennen Begleitregeln
-  unter 16 bzw. unter 14, jedoch kein absolutes Mindestalter. Deshalb werden dort nur die
-  Begleitregeln angezeigt.
+  unter 16 bzw. unter 14, jedoch kein absolutes Mindestalter. Das Mindestalter
+  steht auf den offiziellen Raumseiten.
 - `additionalInfo` ist in dieser Stichprobe bei allen zehn Zimmern leer.
 
-Es werden nur kurze sachliche Fakten und die Namen ausgegeben, keine Werbebeschreibungen,
-Fotos, Cover oder Logos. Bilder, vollständige Bedingungen und verbindliche Details sind
+Von den offiziellen Seiten werden nur kurze sachliche Fakten und Namen übernommen. Bilder, vollständige Bedingungen und verbindliche Details sind
 über die jeweilige offizielle Raumseite in `ZIMMER_SEITEN` erreichbar.
 
 ## Prüfen
