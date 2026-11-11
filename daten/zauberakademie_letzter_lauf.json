@@ -1,5 +1,5 @@
 {
-  "abgefragt_um": "10.11.2026 18:06",
+  "abgefragt_um": "11.11.2026 18:13",
   "zimmer": [
     "12098",
     "12146",
@@ -21798,6 +21798,267 @@
       "zimmer": "Sherlock Holmes",
       "datum": "2027-03-07",
       "uhrzeit": "21:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-11",
+      "uhrzeit": "15:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-11",
+      "uhrzeit": "15:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "18792",
+      "zimmer": "Auroras Magischer Würfel",
+      "datum": "2027-03-11",
+      "uhrzeit": "15:45",
+      "frei": 8,
+      "gesamt": 8,
+      "min_spieler": 1
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-11",
+      "uhrzeit": "16:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-11",
+      "uhrzeit": "16:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-11",
+      "uhrzeit": "16:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-11",
+      "uhrzeit": "16:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-11",
+      "uhrzeit": "16:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-11",
+      "uhrzeit": "16:50",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-11",
+      "uhrzeit": "17:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-11",
+      "uhrzeit": "17:25",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-11",
+      "uhrzeit": "17:25",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-11",
+      "uhrzeit": "17:55",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-11",
+      "uhrzeit": "17:55",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-11",
+      "uhrzeit": "17:55",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-11",
+      "uhrzeit": "18:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "18792",
+      "zimmer": "Auroras Magischer Würfel",
+      "datum": "2027-03-11",
+      "uhrzeit": "18:45",
+      "frei": 8,
+      "gesamt": 8,
+      "min_spieler": 1
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-11",
+      "uhrzeit": "18:50",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-11",
+      "uhrzeit": "18:50",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-11",
+      "uhrzeit": "19:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-11",
+      "uhrzeit": "19:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-11",
+      "uhrzeit": "19:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-11",
+      "uhrzeit": "19:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-11",
+      "uhrzeit": "20:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-11",
+      "uhrzeit": "20:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-11",
+      "uhrzeit": "20:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-11",
+      "uhrzeit": "20:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-11",
+      "uhrzeit": "20:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-11",
+      "uhrzeit": "20:45",
       "frei": 6,
       "gesamt": 6,
       "min_spieler": 2
