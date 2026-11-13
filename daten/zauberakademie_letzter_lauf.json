@@ -1,5 +1,5 @@
 {
-  "abgefragt_um": "12.11.2026 18:38",
+  "abgefragt_um": "13.11.2026 18:15",
   "zimmer": [
     "12098",
     "12146",
@@ -14,204 +14,6 @@
   ],
   "termine": [
     {
-      "zimmer_id": "12200",
-      "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-11-12",
-      "uhrzeit": "20:45",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
-      "datum": "2026-11-12",
-      "uhrzeit": "20:45",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-12",
-      "uhrzeit": "20:45",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "18792",
-      "zimmer": "Auroras Magischer Würfel",
-      "datum": "2026-11-13",
-      "uhrzeit": "12:45",
-      "frei": 8,
-      "gesamt": 8,
-      "min_spieler": 1
-    },
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-11-13",
-      "uhrzeit": "13:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12146",
-      "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-11-13",
-      "uhrzeit": "13:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "19197",
-      "zimmer": "Prestige",
-      "datum": "2026-11-13",
-      "uhrzeit": "13:15",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12200",
-      "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-11-13",
-      "uhrzeit": "13:30",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
-      "datum": "2026-11-13",
-      "uhrzeit": "13:30",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-13",
-      "uhrzeit": "13:30",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-11-13",
-      "uhrzeit": "14:25",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12146",
-      "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-11-13",
-      "uhrzeit": "14:25",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12200",
-      "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-11-13",
-      "uhrzeit": "14:55",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
-      "datum": "2026-11-13",
-      "uhrzeit": "14:55",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-13",
-      "uhrzeit": "14:55",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "18792",
-      "zimmer": "Auroras Magischer Würfel",
-      "datum": "2026-11-13",
-      "uhrzeit": "15:45",
-      "frei": 8,
-      "gesamt": 8,
-      "min_spieler": 1
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-13",
-      "uhrzeit": "16:20",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "19197",
-      "zimmer": "Prestige",
-      "datum": "2026-11-13",
-      "uhrzeit": "17:45",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "18792",
-      "zimmer": "Auroras Magischer Würfel",
-      "datum": "2026-11-13",
-      "uhrzeit": "18:45",
-      "frei": 8,
-      "gesamt": 8,
-      "min_spieler": 1
-    },
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-11-13",
-      "uhrzeit": "19:05",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12146",
-      "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-11-13",
-      "uhrzeit": "19:05",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12200",
-      "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-11-13",
-      "uhrzeit": "19:35",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
       "zimmer_id": "12146",
       "zimmer": "Steampunk Puppenspieler",
       "datum": "2026-11-13",
@@ -22310,6 +22112,492 @@
       "zimmer_id": "12239",
       "zimmer": "Sherlock Holmes",
       "datum": "2027-03-12",
+      "uhrzeit": "21:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "10:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "18792",
+      "zimmer": "Auroras Magischer Würfel",
+      "datum": "2027-03-13",
+      "uhrzeit": "11:00",
+      "frei": 8,
+      "gesamt": 8,
+      "min_spieler": 1
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "11:25",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "11:25",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "11:40",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "11:55",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "11:55",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "12:50",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "12:50",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "13:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "13:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "13:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "13:20",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "18792",
+      "zimmer": "Auroras Magischer Würfel",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:00",
+      "frei": 8,
+      "gesamt": 8,
+      "min_spieler": 1
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "14:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "15:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "16:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "16:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-13",
+      "uhrzeit": "16:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "16:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "16:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "16:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "18792",
+      "zimmer": "Auroras Magischer Würfel",
+      "datum": "2027-03-13",
+      "uhrzeit": "17:00",
+      "frei": 8,
+      "gesamt": 8,
+      "min_spieler": 1
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "17:15",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "17:40",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "17:40",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "18:10",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "18:10",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "18:10",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-13",
+      "uhrzeit": "18:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "19:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "19:05",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "19:05",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "19:35",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "19:35",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
+      "uhrzeit": "19:35",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12098",
+      "zimmer": "Der Henker der Lochgefängnisse",
+      "datum": "2027-03-13",
+      "uhrzeit": "20:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "19197",
+      "zimmer": "Prestige",
+      "datum": "2027-03-13",
+      "uhrzeit": "20:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12146",
+      "zimmer": "Steampunk Puppenspieler",
+      "datum": "2027-03-13",
+      "uhrzeit": "20:30",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "17163",
+      "zimmer": "Vecnas Game",
+      "datum": "2027-03-13",
+      "uhrzeit": "20:45",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12200",
+      "zimmer": "Das Geheimnis der toten Mönche",
+      "datum": "2027-03-13",
+      "uhrzeit": "21:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12434",
+      "zimmer": "Die Abenteuer des Halbling",
+      "datum": "2027-03-13",
+      "uhrzeit": "21:00",
+      "frei": 6,
+      "gesamt": 6,
+      "min_spieler": 2
+    },
+    {
+      "zimmer_id": "12239",
+      "zimmer": "Sherlock Holmes",
+      "datum": "2027-03-13",
       "uhrzeit": "21:00",
       "frei": 6,
       "gesamt": 6,
