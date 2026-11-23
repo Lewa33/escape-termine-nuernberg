@@ -1,5 +1,5 @@
 {
-  "abgefragt_um": "22.11.2026 18:12",
+  "abgefragt_um": "23.11.2026 22:29",
   "zimmer": [
     "12098",
     "12146",
@@ -13,60 +13,6 @@
     "19197"
   ],
   "termine": [
-    {
-      "zimmer_id": "12098",
-      "zimmer": "Der Henker der Lochgefängnisse",
-      "datum": "2026-11-22",
-      "uhrzeit": "20:30",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12146",
-      "zimmer": "Steampunk Puppenspieler",
-      "datum": "2026-11-22",
-      "uhrzeit": "20:30",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "17163",
-      "zimmer": "Vecnas Game",
-      "datum": "2026-11-22",
-      "uhrzeit": "20:45",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12200",
-      "zimmer": "Das Geheimnis der toten Mönche",
-      "datum": "2026-11-22",
-      "uhrzeit": "21:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12434",
-      "zimmer": "Die Abenteuer des Halbling",
-      "datum": "2026-11-22",
-      "uhrzeit": "21:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
-    {
-      "zimmer_id": "12239",
-      "zimmer": "Sherlock Holmes",
-      "datum": "2026-11-22",
-      "uhrzeit": "21:00",
-      "frei": 6,
-      "gesamt": 6,
-      "min_spieler": 2
-    },
     {
       "zimmer_id": "19197",
       "zimmer": "Prestige",
